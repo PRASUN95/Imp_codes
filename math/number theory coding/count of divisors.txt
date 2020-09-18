@@ -1,0 +1,157 @@
+#include<stdio.h>
+long long p[10000000];
+void get(long long *z)
+{
+    char c=getchar_unlocked();
+    for(*z=0;c>47 && c<58;c=getchar_unlocked())
+        *z=*z*10+c-'0';
+}
+void prime ( long long n ) 
+{
+    long long i,k = 0;
+    while (!(n%2))
+    {
+        p[k++] = 2;
+        n/=2;
+    }
+    
+    for ( i = 3; i*i <= n ; i+=2) 
+        while (!(n%i))
+        {
+            p[k++] = i;
+            n/=i;
+        }
+    
+    if (n>1)
+        p[k++] = n;
+}
+int main () 
+{
+    long long n,i,x,d,e,t;
+    get(&t);
+    for(;t--;printf("%lld\n",d))
+    {
+        d=1;
+        e=0;
+        get(&n);
+        prime(n);
+        for(i=0;p[i];)
+        {
+            x = p[i];
+            e=0;
+            while ( p[i] == x ) 
+            {
+                p[i++]=0;
+                e++;
+            }
+            d *=(e+1);
+        }
+    }
+    return 0;
+}
+
+
+
+
+#include <bits/stdc++.h>
+using namespace std;
+#define pb push_back
+#define mp make_pair
+ 
+typedef vector<int> vi;
+ 
+vi prime;
+vector<bool> tick(10001, true);
+void sieve(int n)
+{
+	tick[0] = tick[1] = false;
+	for(int i = 4 ; i <= n ; i+=2)
+		tick[i] = false;
+ 
+	for(int i = 3; i <= sqrt(n); i+=2){
+		if( tick[i] ){
+			for(int j = i*i; j <= n; j += i )
+				tick[j] = false;
+		}
+	}
+	prime.pb(2);
+	for(int i = 3; i <= n; i += 2 )
+		if( tick[i] )
+			prime.pb(i);
+}
+ 
+int main()
+{
+	int i, n, value, count;
+	long long result;
+	sieve(10001);
+	int size = (int)prime.size();
+	cin>>n;
+	while(n--){
+		cin>>value;
+		if(value < 10001 && tick[value]){ cout<<"2\n"; continue; }
+		i = 0;
+		result = 1;
+		while( value > 1){
+			count = 0;
+			while( value%prime[i] == 0){
+				count++;
+				value = value/prime[i];
+			}
+			result = result*(count+1);
+			i++;
+			if( i >= size ) break;
+		}
+		if( value > 1 )
+		    result = result*2;
+		cout<<result<<endl;
+	}
+	return 0;
+}
+Language: C++
+
+#include <bits/stdc++.h>
+using namespace std;
+ 
+int SieveOfEratosthenes(int n)
+{
+	int num_factors = 1;
+	int initial_n=n;
+for (int i = 2; i * i <= initial_n; i++) 
+{
+    int power = 0; 
+    while (n % i == 0) 
+    {
+        n = n / i;
+        power++;
+    }
+    num_factors = num_factors * (power + 1) ;
+}
+ 
+if (n > 1)
+{
+    num_factors = num_factors * 2 ;
+}
+cout<<num_factors<<"\n";
+return 0;
+}
+ 
+// Driver Program to test above function
+int main()
+{
+    int t;
+	cin>>t;
+	while(t--)
+	{
+		int n;
+		cin>>n;
+		if(n==1)
+		{
+		    cout<<"1\n";
+		}
+		else
+        SieveOfEratosthenes(n);
+    }
+	return 0;
+}
+Language: C++

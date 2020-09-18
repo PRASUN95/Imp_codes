@@ -1,0 +1,87 @@
+https://www.codechef.com/LTIME01/problems/NUMFACT
+
+
+
+#include<cstdio>
+#include<cmath>
+#include<vector>
+#include<set>
+using namespace std;
+int pa[1000000];
+int pb[1000000];
+int fa[1000000];
+int fb[1000000];
+ 
+void primeFactors(int n,int* ar,int *f)
+{
+    int in=0,count,ans;
+    // Print the number of 2s that divide n
+    if(n%2==0) ar[in++]=2;
+    count=0;
+    while (n%2 == 0)
+    {
+       // printf("%d ", 2);
+        
+        n = n/2;
+        ++count;
+        
+    }
+    f[2]+=count;
+    
+ 
+    // n must be odd at this point.  So we can skip one element (Note i = i +2)
+    for (int i = 3; i <= sqrt(n); i = i+2)
+    {
+        
+        
+        // While i divides n, print i and divide n
+        if(n%i==0){count=0; ar[in++]=i;
+        while (n%i == 0)
+        {
+           // printf("%d ", i);
+            n = n/i;
+            ++count;
+        }
+        f[i]+=count;
+        }
+    }
+ 
+    // This condition is to handle the case when n is a prime number
+    // greater than 2
+    if (n > 2)
+       { //printf ("%d ", n);
+        ar[in]=n;
+        f[n]+=1;
+        ++in;
+        }
+        
+}
+ 
+main()
+{
+      int i,n,ar[10],ans,tc;
+      scanf("%d",&tc);
+      while(tc--)
+      {
+                
+                for(i=0;i<=1000000;i++)
+                fa[i]=0;
+                ans=1;
+                scanf("%d",&n);
+                for(i=0;i<n;i++)
+                {
+                                scanf("%d",&ar[i]);
+                                primeFactors(ar[i],pa,fa);
+                }
+                
+                
+                for(i=2;i<1000000;i++)
+                ans=ans*(fa[i]+1);
+                
+                printf("%d\n",ans);
+                
+                         
+      }
+     
+}
+  

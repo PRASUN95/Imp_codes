@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+ 
+
+int main()
+{
+   
+ int n;
+
+long a[26]={0};
+
+cin>>n;
+long ans=0;
+
+string s;
+
+cin>>s;
+
+long temp;
+
+for(int i=0; i<n; ++i){
+ 
+    temp=0;
+    
+for(int j=i+1; j<n; ++j){
+  
+      if(s[j]==s[i])
+       
+ {
+ans+=temp;
+}
+       
+ temp+=a[s[j]-'a'];
+  
+  }
+a[s[i]-'a']++;
+}
+
+cout<<ans;
+    return 0;
+}

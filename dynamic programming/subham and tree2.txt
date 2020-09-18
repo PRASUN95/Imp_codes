@@ -1,0 +1,51 @@
+#include "bits/stdc++.h"
+using namespace std;
+const int maxn = 5050;
+const long long inf = 1ll<<60;
+long long dp[maxn][maxn], nxt[maxn];
+int c[maxn], ty[maxn], nd[maxn], parent[maxn];
+vector<int> g[maxn];
+long long ans[maxn];
+int i;
+void dfs(int cur){
+	for(int e = 0; e < maxn; e++) dp[cur][e] = -inf;
+	dp[cur][ty[cur]] = c[cur];
+	nd[cur] = 1;
+	for(int to : g[cur]){
+		if(to == parent[cur]) continue;
+		parent[to] = cur;
+		dfs(to);
+		for(int e = 0; e <= nd[cur] + nd[to]; e++) nxt[e] = -inf;
+		for(int e = 0; e <= nd[cur]; e++){
+			for(int f = 0; f <= nd[to]; f++){
+				nxt[e+f] = max(nxt[e+f], dp[cur][e] + dp[to][f]);
+			}
+		}
+		for(int e = 0; e <= nd[cur] + nd[to]; e++) dp[cur][e] = nxt[e];
+		nd[cur] += nd[to];
+	}
+	for(int e = 0; e < maxn; e++) ans[e] = max(ans[e], dp[cur][e]);
+	dp[cur][0] = max(dp[cur][0], 0ll);
+}
+int main(){
+	int n;
+	scanf("%d", &n);
+	for(int e = 0; e < n - 1; e++){
+		int u, v;
+		scanf("%d %d", &u, &v);
+		g[u].push_back(v);
+		g[v].push_back(u);
+	}
+	for(int e = 1; e <= n; e++) scanf("%d ", ty + e);
+	for(int e = 1; e <= n; e++) scanf("%d ", c + e);
+	for(int e = 0; e < maxn; e++) ans[e] = -inf;
+	parent[1] = -1;
+	dfs(1);
+	for(int e = 1; e <= n; e++){
+		long long res = ans[e];
+		if(res < -(1ll<<50)) printf("Not Found\n");
+		else printf("%lld\n",res );
+	}
+    return 0;
+}
+Language: C++

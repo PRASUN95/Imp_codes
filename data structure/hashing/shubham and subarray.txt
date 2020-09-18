@@ -1,0 +1,29 @@
+#include "bits/stdc++.h"
+using namespace std;
+const int maxn = 1111;
+const int bucket = 333;
+const long long mod1 = 1000000021;
+const long long mod2 = 1000000009;
+int arr[maxn], occ[maxn];
+int main(){
+	int v = rand() % 100000;
+	int n;
+	cin >> n;
+	set<pair<long long, long long> > hs;
+	for(int e = 0; e < n; e++) scanf("%d", arr + e);
+	for(int e = 0; e < n; e++){
+		memset(occ, 0, sizeof(occ));
+		long long hs0 = 1, hs1 = 1;
+		for(int f = e; f < n; f++){
+			if(occ[arr[f]] == 0){
+				hs0 = hs0 * (arr[f] + v) % mod1;
+				hs1 = hs1 * (arr[f] + v) % mod2;
+			}
+			occ[arr[f]]++;
+			hs.insert({hs0, hs1});
+		}
+	}
+	cout << hs.size() << endl;
+    return 0;
+}
+Language: C++

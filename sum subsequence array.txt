@@ -1,0 +1,107 @@
+#include<stdio.h>
+ 
+int poss(int a[],int key,int pos);
+ 
+int main()
+{
+	int k;
+	scanf("%d",&k);
+	while(k>0)
+	{
+		int n,arr[20],i,fg,key;
+		scanf("%d",&n);
+		for(i=0;i<n;i++)
+		{
+			scanf("%d",&arr[i]);
+		}
+		scanf("%d",&key);
+		fg=poss(arr,key,n-1);
+		if(fg)
+		{
+			printf("YES\n");
+		}
+		else
+		{
+			printf("NO\n");
+		}
+		k--;
+	}
+	return 0;
+}
+ 
+int poss(int a[],int key,int pos)
+{
+	if(key==0)
+	{
+		return 1;
+	}
+	if(pos==0)
+	{
+		if(a[0]==key)
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	else
+	{
+		int m=poss(a,key,pos-1);
+		if(m==1)
+		return 1;
+		int n=poss(a,key-a[pos],pos-1);
+		if(n==1)
+		return 1;
+	}
+	return 0;
+}
+Language: C
+
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    int t;
+    cin>>t;
+    while(t--)
+    {
+        int n;
+        cin>>n;
+        int i,j, a[n];
+        for(i=0;i<n;i++)
+            cin>>a[i];
+        int su;
+        cin>>su;
+        int s=int(pow(2,n));
+        long long sum[s]={0};
+        for(i=0;i<s;i++)
+        {
+            for(j=0;j<n;j++)
+            {
+                if(i&(1<<j))
+                    sum[i]+=a[j];
+            }
+        }
+        for(i=0;i<s;i++)
+        {
+            if(sum[i]==su)
+            {
+                cout<<"YES\n";
+                break;
+            }
+        }
+        if(i==s)
+        {
+            cout<<"NO\n";
+        }
+    }
+    return 0;
+}
+Language: C++

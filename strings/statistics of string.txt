@@ -1,0 +1,245 @@
+    #include <bits/stdc++.h>
+    using namespace std;
+     
+    int n,a,mo,ufs[25],ans;
+     
+    int find(int x){return ufs[x]==x?x:ufs[x]=find(ufs[x]);}
+     
+    void work()
+    {
+    	scanf("%d %d %d",&n,&a,&mo);
+    	for (int i=1; i<n; i++)
+    		for (int j=1,s; j<(1<<(n-i)); j++)
+    			{
+    				s=-1;
+    				for (int k=0; k<n; k++)  ufs[k]=k;
+    				for (int k=1; k<=n-i; k++)
+    					if (j&(1<<(k-1)))
+    						{
+    							s=-s;
+    							for (int l=0; l<i; l++)
+    								if (find(l)!=find(k+l))
+    									ufs[find(k+l)]=find(l);
+    						}
+    				if (s<0)  s+=mo;
+    				for (int k=0; k<n; k++)
+    					if (find(k)==k)  s=1LL*s*a%mo;
+    				ans=(ans+s)%mo;
+    			}
+    	printf("%d",ans);
+    }
+     
+    int main()
+    {
+    	work();
+    	return 0;
+    }
+Language: C++14
+
+
+
+
+
+
+
+
+
+
+
+
+#include <bits/stdc++.h>
+#define rep(i,n) for(int (i)=0;(i)<(int)(n);++(i))
+#define reu(i,l,u) for(int (i)=(int)(l);(i)<(int)(u);++(i))
+#define each(it,o) for(auto it= (o).begin(); it != (o).end(); ++ it)
+#define all(o) (o).begin(), (o).end()
+#define mp(x,y) make_pair((x),(y))
+#define mset(m,v) memset(m,v,sizeof(m))
+#define INF 0x3f3f3f3f
+#define INFL 0x3f3f3f3f3f3f3f3fLL
+#define inrep int t;cin>>t; while(t--)
+#define sz(x) int (x.size())
+using namespace std;
+ 
+typedef vector<int> vi;
+typedef pair<int,int> pii;
+typedef vector<pii > vpii;
+typedef long long ll;
+typedef vector<ll> vll;
+typedef pair<ll,ll> pll;
+typedef vector<pll > vpll;
+typedef vector<string> vs;
+typedef long double ld;
+ 
+template<typename T> ostream& operator<< ( ostream &o,vector<T> v ) {
+    if ( v.size() >0 )
+        o<<v[0];
+    for ( unsigned   i=1; i<v.size(); i++ )
+        o<<" "<<v[i];
+    return o<<endl;
+}
+template<typename U,typename V> ostream& operator<< ( ostream &o,pair<U,V> p ) {
+    return o<<"("<<p.first<<", "<<p.second<<") ";
+}
+template<typename T> istream& operator>> ( istream &in,vector<T> &v ) {
+ 
+    for ( unsigned   i=0; i<v.size(); i++ )
+        in>>v[i];
+    return in;
+}
+ 
+struct UnionFind {
+  
+    const int n;
+    
+    int cnt;
+  vi data;
+    // array<int,22> data;
+    UnionFind ( int nn ) : n ( nn ), cnt ( n )
+    ,data ( nn )
+    {  }
+    bool merge ( int x, int y ) {
+        x = root ( x );
+        y = root ( y );
+        if ( x != y ) {
+            if ( data[y] < data[x] ) swap ( x, y );
+            data[x] += data[y];
+            data[y] = x;
+            cnt--;
+        }
+        return x != y;
+    }
+    bool sameSet ( int x, int y ) {
+        return root ( x ) == root ( y );
+    }
+    int root ( int x ) {
+        return data[x] < 0 ? x : data[x] = root ( data[x] );
+    }
+    int size ( int x ) {
+        return -data[root ( x )];
+    }
+    void clear() {
+        fill ( all ( data ),-1 );
+        cnt=n;
+    }
+};
+ 
+ 
+ 
+    int run(int n, int c, int mod) {
+        int st[n];
+        int cpows[n];
+        cpows[0]=1;
+        reu ( i,1,n ) cpows[i]= ( ll ) cpows[i-1]*c%mod;
+        UnionFind uf ( n );
+//         ll cnts[n]={};
+//         vi cnts ( n );
+        vll cnts ( n );
+        reu ( i,1,1<< ( n-1 ) ) {
+            uf.clear();
+            int cnt=0;
+            rep ( j,n ) if ( i& ( 1<<j ) ) st[cnt++]=j+1;
+            int mx=n-st[cnt-1];
+            reu ( l,0,mx ) {
+                rep ( j,cnt ) {
+                    uf.merge ( l,l+st[j] );
+                }
+                if ( cnt &1 ) cnts[l+1]+=cpows[uf.cnt];
+                else cnts[l+1]-=cpows[uf.cnt];
+ 
+            }
+        }
+ 
+ 
+        reu ( i,1,n-1 ) cnts[i]-=cnts[i+1];
+//         cout<<cnts;
+        ll su=0;
+        rep ( j,n ) su+= ( ll ) cnts[j]*j%mod;
+        su%=mod;
+        if ( su<0 ) su+=mod;
+        return su;
+    }
+ 
+ 
+vi zfunc ( const string &s ) {
+    int n =  s.size();
+    vi z ( n );
+    for ( int i = 1, l = 0, r = 0; i < n; ++i ) {
+        if ( i <= r )
+            z[i] = min ( r - i + 1, z[i - l] );
+        while ( i + z[i] < n && s[z[i]] == s[i + z[i]] )
+            ++z[i];
+        if ( i + z[i] - 1 > r )
+            l = i, r = i + z[i] - 1;
+    }
+    return z;
+ 
+}
+int getMax ( const string &s ) {
+    vi z=zfunc ( s );
+    return *max_element ( all ( z ) );
+}
+string zrep ( const string &s ) {
+    string r;
+    vi z=zfunc ( s );
+    for ( int v:z )  r+=char ( '0'+v );
+    return r;
+ 
+}
+void gen ( vector<string> &res,  int n, int c,int i=0, string cur="" ) {
+    if ( i==n ) {
+        res.push_back ( cur );
+        return;
+    }
+    if ( i==0 ) gen ( res,n,c,1,"a" );
+    else
+        rep ( j,c ) {
+        gen ( res, n,c,i+1,cur+char ( 'a'+j ) );
+    }
+}
+int BF ( int n, int c ) {
+    vector<string> ss;
+    gen ( ss,n,c );
+//     cout<<ss<<endl;
+    vi cnts ( n );
+    int su=0;
+    for ( const string &s:ss ) {
+        int x=getMax ( s );
+        if ( x ) {
+            cnts[x]+=c;
+//             cout<<s<<": "<<x<<endl;
+//             cout<<zrep ( s ) <<endl;
+            su+=x*c;
+        }
+    }
+//     rep(i,n)cnts[i]*=c;
+    cout<<cnts;
+    return su;
+}
+void test() {
+ 
+    reu ( c,2,7 )
+    reu ( n,2,16-c ) {
+        int r1=BF ( n,c );
+        int r2=run(n,c,INF);
+        cout<<r1<<" "<<r2<<endl;
+        assert ( r1==r2 );
+    }
+ 
+}
+void test2() {
+    int n=22;
+    int c=1000000;
+    int mod=1000000007;
+//     Solve s ( n,c,mod );
+    cout<<run(n,c,mod) <<endl;
+ 
+}
+int main() {
+    ios_base::sync_with_stdio ( false );
+    int n,c,mod;
+    cin>>n>>c>>mod;
+    cout<<run(n,c,mod)<<endl;
+ 
+}
+// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+Language: C++

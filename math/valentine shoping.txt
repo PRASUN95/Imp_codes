@@ -1,0 +1,33 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define MAX 100005
+int main()
+{
+    int t;
+    cin >> t;
+    while(t--)
+    {
+        int a,b,c,n,m,ind;
+        double max = 1000000;
+        cin >> n >> m;
+        for(int i=1;i<=n;i++)
+            {
+                max = 1000000;
+                for(int j=1;j<=m;j++)
+                    {
+                    int a,b,c;
+                    double aa,bb,cc;
+                    cin >> a >> b >> c;
+                    aa= (double)a/100.0;
+                    bb= (double)b/100.0;
+                    cc= (double)c/100.0;
+                    double res = (1 - aa) * (1 - bb) * (1 - cc);
+                    if(res < max){max = res;ind = j;}
+                    }
+                cout << ind << " ";
+            }
+        cout << endl;
+    }
+    return 0;
+}
+Language: C++

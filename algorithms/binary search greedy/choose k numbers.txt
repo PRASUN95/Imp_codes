@@ -1,0 +1,256 @@
+https://www.hackerearth.com/practice/algorithms/searching/binary-search/practice-problems/algorithm/choose-k-numbers-453f4bce/
+
+
+/**
+ * Created by RKS on 26/8/17.
+ */
+import java.io.*;
+import java.util.*;
+ 
+class TestClass {
+ 
+    public static void main(String[] args) throws Exception {
+        //Scanner sc = new Scanner(System.in);
+        PrintWriter pw = new PrintWriter(System.out);
+        //BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        Scan sc = new Scan();
+ 
+        int t = sc.nextInt();
+ 
+        while (t-- > 0) {
+            int n = sc.nextInt();
+            int s = sc.nextInt();
+            int[] a = new int[n];
+ 
+            for (int i = 0; i < n; i++)
+                a[i] = sc.nextInt();
+ 
+            Arrays.sort(a);
+ 
+            // 1 to n
+            int left = 1;
+            int right = n;
+            int finalK = 1;
+            int diffValue = 1;
+ 
+            while (left <= right) {
+                int mid = left + (right - left) / 2;
+                int k = mid;
+                //System.out.println("k = " + k);
+                int multiplier = s / k;
+ 
+                boolean found = false;
+                int max = 0;
+ 
+                for (int i = 0; i <= n - k; i++) {
+                    int diff = a[i + k - 1] - a[i];
+                    if (diff <= multiplier) {
+                        found = true;
+                        if (diff > max)
+                            max = diff;
+                    }
+                }
+                //System.out.println("found = " + found);
+                if (!found) {
+                    right = mid - 1;
+                }
+                else {
+                    left = mid + 1;
+                    finalK = k;
+                    diffValue = max * k;
+                }
+            }
+ 
+            pw.println(finalK + " " + diffValue);
+        }
+        pw.close();
+ 
+    }
+}
+ 
+ 
+class Scan
+{
+    private byte[] buf=new byte[1024];    //Buffer of Bytes
+    private int index;
+    private InputStream in;
+    private int total;
+    public Scan()
+    {
+        in=System.in;
+    }
+    public int scan()throws IOException    //Scan method used to scan buf
+    {
+        if(total<0)
+            throw new InputMismatchException();
+        if(index>=total)
+        {
+            index=0;
+            total=in.read(buf);
+            if(total<=0)
+                return -1;
+        }
+        return buf[index++];
+    }
+    public int nextInt()throws IOException
+    {
+        int integer=0;
+        int n=scan();
+        while(isWhiteSpace(n))    //Removing starting whitespaces
+            n=scan();
+        int neg=1;
+        if(n=='-')                //If Negative Sign encounters
+        {
+            neg=-1;
+            n=scan();
+        }
+        while(!isWhiteSpace(n))
+        {
+            if(n>='0'&&n<='9')
+            {
+                integer*=10;
+                integer+=n-'0';
+                n=scan();
+            }
+            else throw new InputMismatchException();
+        }
+        return neg*integer;
+    }
+    private boolean isWhiteSpace(int n)
+    {
+        if(n==' '||n=='\n'||n=='\r'||n=='\t'||n==-1)
+            return true;
+        return false;
+    }
+}
+Language: Java 8
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            /*--------TYAGI--------*/
+                             /*-----NIT SILCHAR-----*/
+#include <bits/stdc++.h>
+#define ll long long
+#define bhaag_bhaag_dkbose ios::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+using namespace std;
+int main()
+{
+    bhaag_bhaag_dkbose;
+    ll t; cin>>t; while(t--)
+   {
+       ll n,s; cin>>n>>s;
+       ll a[n];
+       for(ll i=0;i<n;i++)
+        cin>>a[i];
+        sort(a,a+n);
+        ll i=0,j=0;
+        ll difference[50001];
+        memset(difference,0,sizeof difference);
+        ll maxk=1,maxdiff=0;
+        while(i<n and j<n){
+            ll x=a[i];
+            ll k=j-i+1;
+          // cout<<k<<endl;
+            while(k*(a[j]-x)<=s and j<n)
+            {
+                j++;
+                k++;
+            }
+           // cout<<i<<" "<<j<<" "<<k<<endl;
+              i++;
+              
+              if(maxk<=(k-1))
+              {
+                 // cout<<a[j-1]<<" "<<x<<endl;
+                  maxdiff=max(difference[k-1],(k-1)*(a[j-1]-x));
+                  difference[k-1]=maxdiff;
+                  maxk=k-1;
+              }
+    }
+       cout<<maxk<<" "<<maxdiff<<endl;
+   }
+    return 0;
+}
+Language: C++
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include <stdio.h>
+#include <stdlib.h>
+int cmpfunc (const void * a, const void * b)
+{
+   return ( *(int*)a - *(int*)b );
+}
+int main()
+{
+    int t,n,i,k,j,a[50001],r;
+    long s,d,p;
+    scanf("%d",&t);
+    while(t!=0)
+    {
+        scanf("%d %ld",&n,&s);
+        for(i=0;i<n;i++)
+        {
+            scanf("%d",&a[i]);
+            
+        }
+        qsort(a, n, sizeof(int), cmpfunc);
+        k=2;
+        for(i=0;i<n-1;i++)
+        {
+            
+            for(j=i+k-1;j<n;j++)
+            {
+                r=(j-i)+1;
+                p=(a[j]-a[i])*r;
+                if(p<=s)
+                {
+                    if(r>k)
+                    {
+                        k=r;
+                        d=p;
+                        
+                    }
+                    else if(r==k)
+                    {
+                        if(p>d)
+                        d=p;
+                    }
+                }
+                else
+                break;
+                
+            }
+        }
+        printf("%d %ld\n",k,d);
+        t--;
+    }
+    return 0;
+}
+Language: C

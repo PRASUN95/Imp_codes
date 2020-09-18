@@ -1,0 +1,50 @@
+#include "bits/stdc++.h"
+using namespace std;
+int trie[8111111][2], nds = 1;
+void insert(int u){
+	int cur = 0;
+	for(int e = 20; e >= 0; e--){
+		int & v = trie[cur][(u>>e)&1];
+		if(v == 0) v = nds++;
+		cur = v;
+	}
+}
+int get(int u){
+	int cur = 0, ans = 0;
+	for(int e = 20; e >= 0; e--){
+		int v0 = trie[cur][(u>>e)&1];
+		int v1 = trie[cur][((u>>e)&1)^1];
+		if(v1){
+			ans |= 1<<e;
+			cur = v1;
+		} else cur = v0;
+	}
+	return ans;
+}
+const int maxn = 1111;
+int dp[maxn];
+int arr[maxn], p[maxn];
+int main(){
+	int n;
+	scanf("%d", &n);
+	for(int e = 1; e <= n; e++) scanf("%d", arr + e);
+	for(int e = 1; e <= n; e++) arr[e] += arr[e-1];
+	for(int e = 1; e <= n; e++){
+		for(int f = e; f <= n; f++){
+			dp[e] = max(dp[e], arr[f] - arr[e-1]);
+		}
+	}
+	for(int e = n; e >= 1; e--) dp[e] = max(dp[e], dp[e+1]);
+	int ans = 0;
+	for(int e = 1; e <= n; e++){
+		for(int f = e; f <= n; f++){
+			ans = max(ans, get(arr[f] - arr[e-1]));
+		}
+		for(int f = 1; f <= e; f++){
+			insert(arr[e] - arr[f-1]);
+		}
+	}
+	cout << ans << endl;
+    return 0;
+}
+Language: C++

@@ -1,0 +1,86 @@
+#include <iostream>
+#include <map>
+#include <unordered_map>
+#include <cstring>
+#include <fstream>
+using namespace std;
+ 
+int main()
+{
+    unordered_map<string,string> data;
+    map<string,int>likes;
+    int n;
+    cin>>n;
+ 
+    while(n--)
+    {
+        string name,sport;
+        cin>>name>>sport;
+        if(data.count(name)==0)
+        {
+            data[name]=sport;
+            likes[sport]++;
+        }
+    }
+ 
+    int max_likes=0;
+    string max_liked_sport;
+    for(pair<string,int> sport:likes)
+    {
+        if(sport.second>max_likes)
+        {
+            max_likes=sport.second;
+            max_liked_sport=sport.first;
+        }
+    }
+ 
+    cout<<max_liked_sport<<"\n";
+    cout<<likes["football"];
+    return 0;
+}
+Language: C++
+
+
+
+
+
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+    string name,sport,answ;
+    map<string,string>stat;
+    map<string,int>likes;
+    map<string,int>:: iterator it;
+    int t;
+    cin>>t;
+    int count = 1;
+    while(t--)
+    {
+        cin >> name >> sport;
+        if(stat.count(name) == 0)
+            {
+                stat.insert(pair<string,string>(name,sport));
+                if(likes.count(sport) == 0)
+                likes.insert(pair<string,int>(sport,count));
+                else (likes.find(sport)->second)++;
+            }
+    }
+    int ans = -1;
+    for(it=likes.begin();it!=likes.end();it++)
+    {
+        if(it->second > ans) 
+            {
+                ans = it->second;
+                answ = it->first;
+            }        
+    }
+    cout << answ << endl;
+    if(likes.count("football") > 0)
+    cout << likes.find("football")->second;
+    else cout << 0;
+}
+Language: C++

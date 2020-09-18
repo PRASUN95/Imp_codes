@@ -1,0 +1,59 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long 
+long long mod=1000000007;
+ 
+int main()
+{
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    int t;
+    cin>>t;
+    while(t--)
+    {
+        string s;
+        cin>>s;
+        ll ans=0,k=0,co=0;
+        for(int i=0;i<s.length();i++)
+        {
+            if(s[i]=='$'||s[i]=='&')
+            {
+                ans+=(s.length()-i)*(co);
+                ans+=(s.length()-i);
+                co=0;
+            }
+            else
+            {
+                co++;
+            }
+        }
+        cout<<ans<<endl;
+    }
+    return 0;
+}
+Language: C++
+
+
+
+
+
+def main():
+    t = int(input())
+    for _ in range(t):
+        s = input()
+        n = len(s)
+        ans = n * (n + 1) / 2
+        alpha_len = 0
+        for i in range(n):
+            if s[i] == '$' or s[i] == '&':
+                if alpha_len > 0:
+                    ans -= (alpha_len * (alpha_len + 1)) / 2
+                    alpha_len = 0
+            else:
+                alpha_len += 1
+        ans -= (alpha_len * (alpha_len + 1)) / 2
+        print(int(ans))
+ 
+if __name__ == '__main__':
+    main()
+Language: Python 3

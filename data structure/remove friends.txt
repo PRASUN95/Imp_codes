@@ -1,0 +1,656 @@
+
+https://www.hackerearth.com/practice/data-structures/linked-list/singly-linked-list/practice-problems/algorithm/remove-friends-5/description/
+
+
+One thing to observe in this question is that when you have removed 
+say ith friend than you don't need to go back to start of the list.
+ You just need to go back 1 index if the friend removed is not the 0th index friend, 
+if the removed friend is at 0th index than you just begin from start
+ i.e you just stay at 0th index else if we remove ith friend 
+we just need to start our search from (i-1)th index. Now if
+ you are able to remove k friends than it is fine else if suppose 
+you are only able to remove k1 friends than at the end just remove 
+last k-k1 friends to get the answer.
+
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+  int t;
+  scanf("%d",&t);
+  while(t--)
+  {
+      int n,k,tmp;
+      scanf("%d %d",&n,&k);
+      list<int> v;
+      list<int> :: iterator it;
+      for(int i=0;i<n;++i)
+      {
+          scanf("%d",&tmp);
+          v.push_back(tmp);
+      }
+      for(it=v.begin();it!=v.end();)
+      {
+          int tmp1=*(v.begin());
+          if(k==0)
+              break;
+          int val=*it;
+          it++;
+          int val1=*it;
+          if(val>=val1)
+              continue;
+          else
+          {
+              --it;
+              v.erase(it);
+              int tmp2=*it;
+              if(tmp1!=tmp2)
+                  --it;
+              else
+                  it=v.begin();
+              k--;
+          }
+      }
+      if(k!=0)
+      {
+          for(int i=0;i<k;++i)
+              v.pop_back();
+      }
+      for(it=v.begin();it!=v.end();++it)
+          printf("%d ",*it);
+      printf("\n");
+  }
+  return 0;
+}
+
+
+
+**************************************(********************************((((((((((((((((((((((((((
+
+#include <stdio.h>
+    #include<stdlib.h>
+    int *stack,top;
+    int main(void)
+    {
+    	int t,n,k,i,num;
+    	scanf("%d",&t);
+    	while(t>=1)
+    	{
+    		top=-1;
+    		scanf("%d%d",&n,&k);
+    		stack=(int*)calloc(n,sizeof(int));
+    		scanf("%d",&num);
+    		top++;
+    	    stack[top]=num;
+    		for(i=1;i<n;i++)
+    		{
+    			scanf("%d",&num);
+    			while(k>=1&&num>stack[top]&&top!=-1)
+    			{
+    				top--;
+    				k--;
+    			}
+    			top++;
+    	        stack[top]=num;
+    		}
+    		while(k>=1)
+    		{
+    			top--;
+    			k--;
+    		}
+    		for(i=0;i<=top;i++)
+    		printf("%d ",stack[i]);
+    		printf("\n");
+    		t--;
+    		free(stack);
+    	}}
+Language: C
+
+
+***************************************************************************************
+
+
+*****************************************************************************************
+
+#define LOCAL 1
+ 
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<math.h>
+#include<time.h>
+ 
+typedef long long int64;
+clock_t start_time;
+//#define TIME_LIMIT 0.997
+#define CUR_TIME ((double)(clock()-start_time)/CLOCKS_PER_SEC)
+ 
+#define MAX(a,b) ((a)>=(b)?(a):(b))
+#define MIN(a,b) ((a)<=(b)?(a):(b))
+#define ABS(a) ((a)>=0?(a):(-(a)))
+#define Swap(a,b) { int t=a; a=b; b=t; }
+int GCD(int a,int b) { return b==0?a:GCD(b,a%b); }
+ 
+#define INF 2000000009
+#define EPS 1e-12
+#define PI 3.1415926535897931
+ 
+#define DEBUG 0
+#define trace(msg,...) if(DEBUG) fprintf(stderr, "[line %d]: "msg,__LINE__,__VA_ARGS__);
+ 
+#if LOCAL
+#define Get getchar()
+#else
+#define Get getchar_unlocked()
+#endif
+int getInt() { int a=0,s=1; char c=0; while(c<33) c=Get; if(c=='-') {s=-1; c=Get;} while(c>33) {a=(a<<3)+(a<<1)+c-'0'; c=Get;} return a*s; }
+int64 getInt64() { int64 a=0,s=1; char c=0; while(c<33) c=Get; if(c=='-') {s=-1; c=Get;} while(c>33) {a=(a<<3)+(a<<1)+c-'0'; c=Get;} return a*s; }
+int compare(const void *x,const void *y) { int a=*(int*)x,b=*(int*)y; return a<b?-1:1; }
+int power(int a,int e) { if(e==0) return 1; int s=power(a,e>>1); s=(int64)(s)*s; return e&1?(int64)(s)*a:s; }
+int powerM(int a,int e,int m) { if(e==0) return 1%m; int s=powerM(a,e>>1,m); s=((int64)(s)*s)%m; return e&1?((int64)(s)*a)%m:s; }
+ 
+/* Main code begins here */
+ 
+#define maxi 100000
+ 
+struct node
+{
+	int v;
+	struct node *next,*prev;
+} a[maxi+5],*left,*right;
+ 
+int N,K;
+ 
+int solve()
+{
+	struct node *prev=NULL,*cur=left,*nxt=NULL;
+	while(K>0)
+	{
+		nxt = cur->next;
+		if(nxt == NULL) {
+			if(prev==NULL) {
+				left=NULL;
+			}
+			else {
+				prev->next = NULL;
+			}
+			K--;
+			prev=NULL; cur=left; nxt=NULL;
+		}
+		else if(cur->v < nxt->v) {
+			if(prev==NULL) {
+				left=nxt; nxt->prev=NULL;
+				prev=NULL; cur=left; nxt=NULL;
+			}
+			else {
+				prev->next = nxt; nxt->prev=prev;
+				cur=prev; prev=prev->prev; nxt=NULL;
+			}
+			K--;
+		}
+		else {
+			prev=cur;
+			cur=nxt;
+		}
+	}
+	for(cur=left;cur!=NULL;cur=cur->next) printf("%d ",cur->v); printf("\n");
+}
+ 
+int main()
+{
+	int T=getInt();
+	while(T--)
+	{
+		N=getInt(); K=getInt();
+		int i;
+		left=&a[0];
+		right=&a[N-1];
+		for(i=0;i<N;i++)
+		{
+			a[i].v=getInt();
+			if(i==0) a[i].prev=NULL;
+			else a[i].prev=&a[i-1];
+			if(i==N-1) a[i].next=NULL;
+			else a[i].next=&a[i+1];
+		}
+		solve();
+	}
+	return 0;
+}
+Language: C
+
+
+
+********************************************************************************************************************
+************************************************************************************************************************
+**********************************************************************************************************************
+***********************************************************************************************************************
+
+
+
+#include <iostream>
+#include <deque>
+using namespace std;
+ 
+int main() {
+	ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+	 deque <int> q1,q2;
+	 int t,n,k,l,i,z,m; cin>>t; bool p;
+	 while(t--)
+	 {  m=0; p=false;
+	 	cin>>n>>k;
+	 	for(i=0;i<n;i++)  { cin>>l;  q1.push_back(l);  }
+	 	
+	 	z=q1.front(); q1.pop_front();
+	 	while(!q1.empty())
+	 	{   
+	 	if(q2.empty())
+	 	{
+	 		if(z<q1.front()) { z=q1.front(); q1.pop_front(); m++; p=true;  }
+	 		
+	 		else {q2.push_back(z);  z=q1.front(); q1.pop_front();}
+	 	}
+	 	else
+	 	{ 
+	 		if(z<q1.front()) {z=q2.back(); q2.pop_back(); m++; p=true; }
+	 		
+	 		else {q2.push_back(z);  z=q1.front(); q1.pop_front();}
+	 		
+	 	}
+	 	if(m==k) { break; }
+	 	}
+	 	
+	 	if(p==false) { q1.pop_back(); }
+	 	
+	 	while(!q2.empty()) { cout<<q2.front()<<" "; q2.pop_front(); }
+	 	cout<<z<<" ";
+	 	while(!q1.empty()) { cout<<q1.front()<<" "; q1.pop_front(); }
+	 	cout<<"\n";
+	 	
+	 	
+	 	
+	 	
+	 }
+			
+		  
+ 
+	
+	return 0;
+}
+Language: C++14
+
+
+
+
+
+
+
+
+
+********************************************************************************************************************
+************************************************************************************************************************
+**********************************************************************************************************************
+***********************************************************************************************************************
+
+
+
+
+
+
+#include <iostream>
+#include "stdio.h"
+ 
+#include "vector"
+ 
+#define getcx getchar_unlocked
+using namespace std;
+inline void inp( int &n )
+ {
+    n=0;
+    int ch=getcx();int sign=1;
+    while( ch < '0' || ch > '9' ){if(ch=='-')sign=-1; ch=getcx();}
+ 
+    while(  ch >= '0' && ch <= '9' )
+            n = (n<<3)+(n<<1) + ch-'0', ch=getcx();
+    n=n*sign;
+  }
+ 
+int main()
+{
+    int t;
+	inp(t);
+	int n=0,k=0;
+	vector<int> x;
+	int temp=0;
+	while(t--){
+		inp(n);
+		inp(k);
+		x.clear();
+		inp(temp);
+		x.push_back(temp);
+		for(int i=1;i<n;i++){
+            inp(temp);
+            x.push_back(temp);
+            
+            while(k && x[i-1]<x[i] && (i-1)!=-1){
+                x.erase(x.begin() + i-1);
+                i--;
+                k--;
+                n--;
+                
+            }
+		}
+ 
+        for(int i=0;i<x.size()-k;i++){
+            cout<<x[i]<<" ";
+        }
+        cout<<"\n";
+	}
+}
+Language: C++
+
+
+
+
+
+
+
+
+
+********************************************************************************************************************
+************************************************************************************************************************
+**********************************************************************************************************************
+***********************************************************************************************************************
+
+
+
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.InputMismatchException;
+ 
+class TestClass {
+    public static void main(String args[]) throws Exception {
+        InputReader in = new InputReader(System.in);
+        OutputWriter out = new OutputWriter(System.out);
+        StringBuilder sb = new StringBuilder();
+        int T = in.readInt();
+        int n;
+        int k;
+        for (int test = 0; test < T; test++) {
+            n = in.readInt();
+            k = in.readInt();
+            LinkedList list = new LinkedList();
+            for (int i = 0; i < n; i++) {
+                list.add(in.readInt());
+            }
+            list.removeKFriends(k);
+            Node tmp = list.start;
+            while (tmp!=null){
+                sb.append(tmp.v).append(" ");
+                tmp = tmp.next;
+            }
+            sb.append("\n");
+        }
+        out.print(sb.toString());
+        out.flush();
+        out.close();
+    }
+}
+class LinkedList{
+    Node start;
+    Node end;
+ 
+    public void add(int v){
+        Node n =  new Node(v);
+        if(this.start == null){
+            this.start = n;
+            this.end = n;
+        }else {
+            n.prev = this.end;
+            this.end.next = n;
+            this.end = n;
+        }
+    }
+    public void remove(Node n){
+        if(n == this.start){
+            this.start = this.start.next;
+            this.start.prev = null;
+        } else if(n == this.end){
+            this.end = this.end.prev;
+            this.end.next = null;
+        }else {
+            n.prev.next = n.next;
+            n.next.prev = n.prev;
+            n.next = null;
+            n.prev = null;
+        }
+        if(this.start == null)
+            this.end = null;
+    }
+ 
+    public void removeKFriends(int k){
+        Node t = this.start;
+        Node remove;
+        while (k!=0){
+            if(t.next!=null) {
+                if (t.v < t.next.v) {
+                    remove = t;
+                    if(t.prev != null) {
+                        t = t.prev;
+                    }
+                    else {
+                        t = t.next;
+                    }
+                    remove(remove);
+                    k--;
+                }else {
+                    t = t.next;
+                }
+            }else {
+                remove(this.end);
+                k--;
+            }
+        }
+    }
+ 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        Node tmp = this.start;
+        while (tmp!=null){
+            sb.append(tmp.v).append(" ");
+            tmp = tmp.next;
+        }
+        return sb.toString();
+    }
+}
+class Node{
+    int v;
+    Node next;
+    Node prev;
+ 
+    public Node(int v) {
+        this.v = v;
+    }
+ 
+    @Override
+    public String toString() {
+        return this.v+"";
+    }
+}
+ 
+class InputReader {
+ 
+    private InputStream stream;
+    private byte[] buf = new byte[1024];
+    private int curChar;
+    private int numChars;
+    private SpaceCharFilter filter;
+ 
+    public InputReader(InputStream stream) {
+        this.stream = stream;
+    }
+ 
+    public int read() {
+        if (numChars == -1)
+            throw new InputMismatchException();
+        if (curChar >= numChars) {
+            curChar = 0;
+            try {
+                numChars = stream.read(buf);
+            } catch (IOException e) {
+                throw new InputMismatchException();
+            }
+            if (numChars <= 0)
+                return -1;
+        }
+        return buf[curChar++];
+    }
+ 
+    public int readInt() {
+        int c = read();
+        while (isSpaceChar(c))
+            c = read();
+        int sgn = 1;
+        if (c == '-') {
+            sgn = -1;
+            c = read();
+        }
+        int res = 0;
+        do {
+            if (c < '0' || c > '9')
+                throw new InputMismatchException();
+            res *= 10;
+            res += c - '0';
+            c = read();
+        } while (!isSpaceChar(c));
+        return res * sgn;
+    }
+ 
+ 
+    public long readLong() {
+        int c = read();
+        while (isSpaceChar(c))
+            c = read();
+        long sgn = 1;
+        if (c == '-') {
+            sgn = -1;
+            c = read();
+        }
+        long res = 0;
+        do {
+            if (c < '0' || c > '9')
+                throw new InputMismatchException();
+            res *= 10;
+            res += c - '0';
+            c = read();
+        } while (!isSpaceChar(c));
+        return res * sgn;
+    }
+ 
+    public String readLine() {
+        int c = read();
+        StringBuilder res = new StringBuilder();
+        while (!isNewLineChar(c)) {
+            res.appendCodePoint(c);
+            c = read();
+        }
+        return res.toString();
+    }
+ 
+    private boolean isNewLineChar(int c) {
+        return c == '\n';
+    }
+ 
+    public String readString() {
+        int c = read();
+        while (isSpaceChar(c))
+            c = read();
+        StringBuilder res = new StringBuilder();
+        do {
+            res.appendCodePoint(c);
+            c = read();
+        } while (!isSpaceChar(c));
+        return res.toString();
+    }
+ 
+    public boolean isSpaceChar(int c) {
+        if (filter != null)
+            return filter.isSpaceChar(c);
+        return c == ' ' || c == '\n' || c == '\r' || c == '\t' || c == -1;
+    }
+ 
+    public String next() {
+        return readString();
+    }
+ 
+    public interface SpaceCharFilter {
+        boolean isSpaceChar(int ch);
+    }
+}
+ 
+class OutputWriter {
+    private final PrintWriter writer;
+ 
+    public OutputWriter(OutputStream outputStream) {
+        writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(outputStream)));
+    }
+ 
+    public OutputWriter(Writer writer) {
+        this.writer = new PrintWriter(writer);
+    }
+ 
+    public void print(Object... objects) {
+        for (int i = 0; i < objects.length; i++) {
+            if (i != 0)
+                writer.print(' ');
+            writer.print(objects[i]);
+        }
+    }
+ 
+    public void printLine(Object... objects) {
+        print(objects);
+        writer.println();
+        this.flush();
+    }
+ 
+    public void close() {
+        writer.close();
+    }
+ 
+    public void flush() {
+        writer.flush();
+    }
+ 
+    public void println(Object... objects) {
+        print(objects);
+        writer.println();
+        this.flush();
+    }
+}
+ 
+class IOUtils {
+ 
+    public static int[] readIntArray(InputReader in, int size) {
+        int[] array = new int[size];
+        for (int i = 0; i < size; i++)
+            array[i] = in.readInt();
+        return array;
+    }
+ 
+    public static int[] readIntArray(InputReader in, int size, long[] counts) {
+        int[] array = new int[size];
+        for (int i = 0; i < size; i++) {
+            array[i] = in.readInt();
+            if (array[i] % 2 == 0)
+                counts[0]++;
+            else
+                counts[1]++;
+        }
+        return array;
+    }
+ 
+}
+Language: Java 8

@@ -1,0 +1,83 @@
+
+Kya Ye wala Ho payega ? Basic Number Theory
+
+#include<stdio.h>
+long long int A[100001];
+int p[100001];
+int main()
+{
+    int N,Q,L,R,i;
+    scanf("%d",&N);
+    for(i=1;i<=N;++i)
+    {
+        scanf("%lld",&A[i]);
+        while(A[i]%2 == 0)
+        {
+            A[i]>>=1;
+            p[i]++;
+        }
+        p[i] += p[i-1];
+    }
+    scanf("%d",&Q);
+    while(Q--)
+    {
+        scanf("%d %d",&L, &R);
+        printf("%d\n", p[R]-p[L-1]);
+    }
+}
+
+
+***********************************
+MY SUBMISSION
+***********************************
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+
+int main()
+{
+   
+
+ long long n;
+  
+
+  cin>>n;
+   
+ long long a[n];
+  
+  for(long long i=1;i<=n;i++)
+scanf("%lld",&a[i]);
+   
+ long long q,l,r,p=1,max,res;
+ 
+   cin>>q;
+   
+ while(q--)
+  
+  {
+      
+  cin>>l>>r;
+      
+  p=1;max=0;
+      
+  for(long long i=l;i<=r;i++)p*=a[i];
+ 
+       for(long long j=1;j<=ceil(sqrt(p));j++)
+   
+         {
+                res=pow(2,j);
+         
+       if(res>p)break;
+              
+  if(p%res==0)max=j;
+           
+ }
+        printf("%lld\n",max);
+  
+  }
+   
+ return 0;
+
+}

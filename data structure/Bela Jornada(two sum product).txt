@@ -1,0 +1,43 @@
+https://www.hackerearth.com/practice/data-structures/arrays/1-d/practice-problems/algorithm/beautiful-journey-1/
+
+#include <bits/stdc++.h>
+using namespace std;
+#define te(t) cin>>t;while(t--)
+#define rep(i,s,n) for(int i=s;i<n;i++)
+#define repb(i,n,e) for(int i=n-1;i>=e;i--)
+#define mset(x,v)   memset(x,v,sizeof(x))
+#define isnum(a)    (a>=48 && a<=57)
+#define ischar(a)   (a>='a' && a<='z')
+#define isChar(a)   (a>='A' && a<='Z')
+typedef long long ll;
+typedef vector<int> vi;
+typedef pair<int,int> pii;
+typedef pair<ll,ll> pll;
+typedef vector<pii> vpii;
+typedef unsigned long long llu;
+#define ff first
+#define ss second
+#define mp make_pair
+#define pb push_back
+#define boostio ios_base::sync_with_stdio(false);cin.tie(0);
+#define mod 1000000007
+const int N = 1300031;
+int t;
+int main()
+{
+    int n;
+    ll curr = 0,sum = 0;
+    cin >> n;
+    int a[n];
+    rep(i,0,n){cin >> a[i];sum += a[i];}
+    ll max = -1;
+    rep(i,0,n)
+    {
+        curr += a[i];
+        ll prod = (sum - curr) * curr ;
+        if(prod > max) max = prod;
+    }
+    cout << max;
+    return 0;
+}
+Language: C++

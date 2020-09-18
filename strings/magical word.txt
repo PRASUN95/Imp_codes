@@ -1,0 +1,70 @@
+#include<iostream>
+using namespace std;
+int fun(int f)
+{
+	int i,j=0,k=0;
+	static int f1=0;
+	if(j==0)
+	{
+	if(f>=121)
+	{
+		cout<<"q";f1=0;
+		return 0;
+	}
+	j++;
+	}
+	for(i=2;i<f;i++)
+	{
+		if(f%i==0)
+		{
+			k=1;
+			if(f1%2==0)
+			{
+				f1++;
+				return fun(f-f1);
+			}
+			else if(f1%2!=0)
+			{
+				f1++;   
+				return fun(f+f1);
+			}
+			break;
+		}
+	}
+	if(k==0)
+	cout<<(char)f;
+	f1=0;
+	return 0;
+}
+main()
+{
+	int t,n,s;
+	cin>>t;
+	char a[10000];
+	int i,j=0,k,f;
+	for(i=0;i<t;i++)
+	{
+		cin>>n;                     // ABCD
+		j=0;
+		while(j<n)
+		{
+			cin>>a[j];
+			f=a[j];
+			if(f<65)
+			{
+				if(f>93 && f<97)
+				{
+					s=f-97;
+					f-=s;
+					goto g;
+				}
+				s=65-f;
+				f+=s;	
+			}
+			g:fun(f);
+			j++;
+		}
+		cout<<endl;
+	}
+}
+Language: C++

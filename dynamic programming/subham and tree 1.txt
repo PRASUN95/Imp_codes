@@ -1,0 +1,66 @@
+#include "bits/stdc++.h"
+using namespace std;
+const int maxn = 100100;
+int sz[maxn], parent[maxn], ans[maxn], val[maxn];
+vector<pair<int, int> > g[maxn], tr[maxn];
+set<long long> tot;
+void init(int cur){
+	sz[cur] = 1;
+	for(auto e : g[cur]){
+		if(e.first == parent[cur]) continue;
+		tr[cur].push_back(e);
+		parent[e.first] = cur;
+		init(e.first);
+		sz[cur] += sz[e.first];
+	}
+}
+void add(int cur, long long sum, long long off){
+	tot.insert(sum + val[cur] - off);
+	for(auto e : tr[cur]){
+		add(e.first, sum + e.second, off);
+	}
+}
+long long solve(int cur, bool keep){
+	int best_child = -1;
+	long long offset = 0;
+	for(auto e : tr[cur]){
+		if(best_child == -1 || sz[best_child] < sz[e.first]){
+			best_child = e.first;
+			offset = e.second;
+		}
+	}
+	for(auto e : tr[cur]){
+		if(e.first != best_child){
+			solve(e.first, false);
+		}
+	}
+	if(best_child != -1){
+		offset += solve(best_child, true);
+	}
+	for(auto e : tr[cur]){
+		if(e.first != best_child){
+			add(e.first, e.second, offset);
+		}
+	}
+	tot.insert(val[cur] - offset);
+	ans[cur] = tot.size();
+	if(!keep) tot.clear();
+	return offset;
+}
+int main(){
+	int n;
+	scanf("%d",&n);
+	for(int e = 0; e < n - 1;e ++){
+		int u, v, w;
+		scanf("%d %d %d", &u, &v, &w);
+		g[u].push_back({v, w});
+		g[v].push_back({u, w});
+	}
+	for(int e = 1; e <= n; e++) scanf("%d", val + e);
+	parent[1] = -1;
+	init(1);
+	solve(1, true);
+	for(int e = 1; e <= n; e++) printf("%d\n", ans[e]);
+    return 0;
+}
+Language: C++

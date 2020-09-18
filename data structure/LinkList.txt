@@ -1,0 +1,51 @@
+#include <bits/stdc++.h>
+using namespace std;
+struct frien
+    {
+        int data;
+        struct frien *next;
+    };
+ typedef struct frien node;
+node *add(node *tail , int data)
+{
+	node *pr;
+	if (tail == NULL)
+		{
+	           	 pr = (node *)malloc(sizeof(node));
+		 pr->data = data;
+		 pr->next = NULL;
+		 return pr;
+		}
+	else 
+	{
+	 pr = (node *)malloc(sizeof(node));
+	 pr->data = data;
+	 pr->next = NULL;
+	 tail -> next = pr;
+	}
+    return pr;
+}
+void display(node *head)
+    {
+        while(head != NULL)
+            {
+                cout << head->data<<" ";
+                head = head ->next;
+            }
+    }
+int main()
+    {
+        int n,data,k,t;
+        cin >> t;
+              while(t--) { cin >> n;
+               node *head = NULL; 
+               node *tail = head;
+                for (int i=1;i<=n;i++)
+                    {
+                        cin >> data;
+                        tail = add(tail,data);
+                        if(head == NULL) head = tail;
+                    }
+            display(head);}
+        return 0;
+    }

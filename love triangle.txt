@@ -1,0 +1,24 @@
+//palindromic series
+input 1 2 3 10 100
+output 1 2 3 11 121
+#include <stdio.h>
+long int dec2bas(long int n);
+ int main()
+{
+    long int a;
+    do{
+        if(scanf("%ld",&a)!=EOF)
+          printf("%ld\n",dec2bas(a));
+        else 
+            break;
+    }
+    while(1);
+    return 0;
+}
+long int dec2bas(long int n)
+{
+    if(n<9)
+        return n;
+    return n%9 + 10*dec2bas(n/9);
+ 
+}

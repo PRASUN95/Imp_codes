@@ -1,0 +1,20 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+    int n,k,a,f=0;
+    cin >> n >> k;
+   map <int,bool> mp;
+   for(int i=0;i<n;i++)
+   {
+       cin >> a;
+       if(mp.count(k-a))
+       {
+           f=1;break;
+       }
+       mp[a] = true;
+   }
+    if(f == 0)cout << "NO";
+    else cout << "YES";
+    return 0;
+}

@@ -1,0 +1,230 @@
+We are given a set S (qualities which Marut wants) , then for each query we are given set T(qualities of a girl) , we have to count how many set T are superset of S.
+
+Few possible solution can be brute force searching, binary search, and hashing. But solution using brute force searching and binary search would time out. Hashing can be used with proper data structure. Possible data structures which can be used are LinkedHashSet ( author's solution) and hashed array ( tester's solution) . I have not checked but solution using hashing with C++ set or C++ map would time out also.
+
+For C++ users, this solution requires them to parse the string into integer. Though , programming languages such as Java and Python provide inbuilt methods for parsing.
+
+One thing to note here is that there is no need to parse the string into integer. (Parsing is slow). (See author's solution). We can work with strings also.
+
+While taking input for set T , we will check whether the current number is present in set S or not . If it is present , then we will increase our counter. After that , we will check whether the counter's value is greater than or equal to the size of set S , if yes , then the current set T is superset of set S . We will do this N times . At last, we will print the answer.
+
+If you have any query , please comment below or ping me.
+
+Author Solution by Shivam Mishra
+import java.io.*;
+import java.util.*;
+class soljava {
+public static void main(String args[]) throws Exception {
+	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	int m = Integer.parseInt(br.readLine());	
+	LinkedHashSet hs = new LinkedHashSet();
+	String line = br.readLine();
+	StringTokenizer tk = new StringTokenizer(line);
+	int i,t;
+	
+	for(i=0;i<m;++i) {
+		//	t = Integer.parseInt();
+			hs.add(tk.nextToken());
+		}
+	int n = Integer.parseInt(br.readLine());
+	int ans=0;
+	int num;
+	int c=0;
+	for(i=0;i<n;++i) {	
+		c=0;
+		 line = br.readLine();
+		 tk = new StringTokenizer(line);
+	
+		while(tk.hasMoreTokens()) {
+	
+			//num = Integer.parseInt();
+			if(hs.contains(tk.nextToken()))
+				++c;
+				
+			//	if(c>=m)
+			//		break;
+		}
+		if(c>=m)
+			++ans;						
+	}
+	
+	System.out.println(ans);	
+}
+}
+//
+Tester Solution by Abhinav Sharma
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+    //ios::sync_with_stdio(false);
+    int M,i,N;
+    int good[10001]={0},num;
+    cin>>M;
+    assert(1<=M && M<=100);
+    int repeat=0;
+    for(i=0;i<M;i++)
+    {
+        cin>>num;
+        assert(1<=num && num<=10000);
+        assert(good[num]==0);
+        if(good[num]==0)
+        	good[num]=1;
+       
+    }
+   
+    cin>>N;
+    assert(1<=N && N<=9000);
+    char s[2]; 
+    gets(s);
+  
+    int ans=0;
+    while(N--)
+    {
+    	int done[100001]={0};
+        char ch;
+        int num=0;
+        int thisone=0;
+        char str[1000001];
+      
+        gets(str);
+    
+        int i=0;
+        int count=0;
+        while(str[i]!='\0')
+        {
+        	ch=str[i];
+            if(ch==' ')
+            {
+            	count++;
+            	assert(done[num]==0);
+       			assert(1<=num && num<=10000);
+        		done[num]=1;
+                if(good[num]==1)
+                {
+                	thisone++;
+                }
+        		
+                num=0;
+            }
+            else
+            {
+                num=num*10+(ch-'0');
+                
+            }
+            i++;
+            
+        }
+        if(num!=0)
+        {
+        	count++;
+        	assert(done[num]==0);
+        	
+        	if(good[num]==1)
+                    thisone++;
+        }
+        assert(1<=count && count<=1000);
+      
+        if(thisone==M)
+        {
+            ans++;
+        }
+    
+      
+    }
+     cout<<ans<<endl;
+    return 0;
+}  
+
+
+
+
+
+
+
+
+
+ 
+    #include <stdio.h>
+    int fq[100000];
+    int main()
+    {
+        int t,i,n,x,flag=0,count,j;
+        char st[20000];
+        scanf("%d",&t);
+        for(i=0;i<t;i++)
+        {
+        	scanf("%d",&x);
+        	fq[x]=1;
+        }
+        scanf("%d",&n);
+        getchar();
+        for(i=0;i<n;i++)
+    	{
+    		count = 0;
+     
+    		gets(st);
+    		int len = strlen(st);
+    		x=0;
+    		for(j=0;j<len;j++)
+    		{
+    			if(st[j]==' ')
+    			{
+    				if(fq[x]==1)
+    					count++;
+    				x=0;
+    			}
+    			else
+    				x = x*10 + (st[j]-'0');
+    		}
+    		if(fq[x]==1)
+    			count++;
+    		if(count>=t)
+    			flag++;
+     
+    	}
+    	printf("%d\n",flag);
+        return 0;
+    }
+ 
+Language: C
+
+
+
+
+
+
+
+def main():
+    from sys import stdin, stdout
+    stdin.readline()
+    marut = set(stdin.readline().split())
+    count = 0
+    for i in range(int(stdin.readline())):
+        girl = set(stdin.readline().split())
+        if marut <= girl:
+            count += 1
+    stdout.write(str(count))
+ 
+main()
+Language: Python 3
+
+
+
+
+__author__ = 'onkar.kotasthane@gmail.com'
+raw_input()
+list=raw_input().strip().split(" ") #qualitites
+list=set([x for x in list])
+n=raw_input().strip()
+n=int(n)
+#print(list)
+selected=0
+while(n>0):
+    n=n-1
+    tmp=raw_input().strip().split(" ")
+    girlQ=set([x for x in tmp]) #qualitites
+    if(len(list.difference(girlQ))==0):
+        selected=selected+1
+print(selected)
+Language: Python

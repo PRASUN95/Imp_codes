@@ -1,0 +1,677 @@
+https://www.hackerearth.com/practice/algorithms/graphs/breadth-first-search/practice-problems/algorithm/matrix-11-f80d341e/
+
+#include <bits/stdc++.h>
+using namespace std;
+ 
+typedef long long ll;
+#define pi(x) printf("%d ",x)
+#define pll(x) printf("%lld ",x)
+#define endl() printf("\n")
+#define mp make_pair
+#define pb push_back
+#define fr first
+#define se second
+#define M 1000000007
+ 
+vector<ll> t;
+ll n;
+ 
+void build() {  // build the tree
+  for (int i = n - 1; i > 0; --i) t[i] = max(t[i<<1] , t[i<<1|1]);
+}
+ 
+ll query(int l, int r) {  // sum on interval [l, r)
+  ll res = -1e18;
+  for (l += n, r += n; l < r; l >>= 1, r >>= 1) {
+    if (l&1) res = max(res,t[l++]);
+    if (r&1) res = max(res,t[--r]);
+  }
+  return res;
+}
+ 
+int main()
+{
+    ll q,i,x,y,x1,y1,l,r,j;
+    cin >> n >> q;
+    t.resize(2*n,0);
+    vector<pair<ll,ll>> v;
+    vector<ll> a;
+    for(i=0;i<n;i++)
+    {
+        cin >> x >> y;
+        v.pb(mp(x,y));
+    }
+    sort(v.begin(),v.end());
+    for(i=0;i<n;i++)
+    {
+        a.pb(v[i].fr);
+        t[n+i]=v[i].se;
+    }
+    build();
+    while(q--)
+    {
+        ll ans=0;
+        cin >> x >> y >> x1 >> y1;
+        if(x>x1)
+        {
+            swap(x,x1);
+            swap(y,y1);
+        }
+        l=lower_bound(a.begin(),a.end(),x)-a.begin();
+        r=upper_bound(a.begin(),a.end(),x1)-a.begin();
+        j=query(l,r);
+        if(j>=y)
+        {
+            ans+=(j+1)-y;
+            y=j+1;
+        }
+        ans+=x1-x;
+        ans+=abs(y-y1);
+        cout << ans << endl;
+    }
+}
+
+
+
+
+
+
+
+#include <vector>
+#include <ctime>
+#include <cstring>
+#include <climits>
+#include <cassert>
+#include <iostream>
+#include <algorithm>
+ 
+using namespace std;
+ 
+struct Config {
+ 
+    static const int INPUT_BUFFER_SIZE = 1<<16;
+    static const int OUTPUT_BUFFER_SIZE = 1<<16;
+};
+ 
+class Reader {
+ 
+public: 
+ 
+    Reader();
+ 
+    unsigned int uint();
+    int sint();
+    
+private:
+ 
+    char gc();
+ 
+    bool is_digit[1<<7];
+    int cursor = Config::INPUT_BUFFER_SIZE;
+    char buffer[Config::INPUT_BUFFER_SIZE+1];
+} reader;
+ 
+class Writer {
+ 
+public: 
+ 
+    ~Writer();
+ 
+    void print(int x);
+    void println(long long x);
+ 
+private:
+ 
+    void pc(char c); 
+ 
+    int cursor = 0;
+    char buffer[Config::OUTPUT_BUFFER_SIZE];
+} writer;
+ 
+const int N = 3e5;
+ 
+struct Identifier {
+ 
+    void add(int x) {
+        v[n++] = x;
+    }
+ 
+    void build() {
+        sort(v, v+n);
+        n = unique(v, v+n) - v;
+    }
+ 
+    int index(int x) {
+        return lower_bound(v, v+n, x) - v;
+    }
+ 
+    int n = 0;
+    int v[N];
+} id;
+ 
+int x[N], y[N], t[N<<1];
+ 
+int main() {
+    int n = reader.uint(); 
+    int q = reader.uint();
+ 
+    for (int i = 0; i < n; ++i) {
+        id.add(x[i] = reader.sint());
+        y[i] = reader.sint();
+    }
+    
+    id.build();
+ 
+    for (int i = 0; i < n; ++i) {
+        t[n+id.index(x[i])] = y[i];
+    }
+ 
+    for (int i = n-1; i > 0; --i) t[i] = max(t[i<<1], t[i<<1|1]);
+ 
+    for (int i = 0; i < q; ++i) {
+        int l = reader.sint();
+        int sy = reader.sint();
+        int r = reader.sint();
+        int fy = reader.sint();
+ 
+        if (l > r) {
+            swap(l, r);
+            swap(sy, fy);
+        }
+ 
+        long long ans = r-l;
+ 
+        l = id.index(l);
+        r = id.index(r);
+ 
+        int res = INT_MIN;
+        for (l += n, r += n; l < r; l >>= 1, r >>= 1) {
+            if (l&1) res = max(t[l++], res);
+            if (r&1) res = max(t[--r], res);
+        }
+ 
+        if (max(sy, fy) > res) {
+            writer.println(ans+abs(sy-fy));
+        }
+        else {
+            ans += res+1-fy;
+            ans += res+1-sy;
+            writer.println(ans);
+        }
+    }
+ 
+    return 0;
+}
+ 
+Reader::Reader() {
+#ifdef LOCAL
+    FILE* in = freopen("sample.in", "r", stdin);
+#endif
+    memset(is_digit, 0, 1<<7);
+    memset(is_digit+48, 1, 10);
+    is_digit['-'] = true;
+}
+ 
+char Reader::gc() {
+    if (cursor == Config::INPUT_BUFFER_SIZE) {
+        buffer[fread(buffer, 1, Config::INPUT_BUFFER_SIZE, stdin)] = cursor = 0;
+    }
+    return buffer[cursor++];
+}
+ 
+int Reader::sint() {
+    char w;
+    while (!is_digit[w = gc()]);
+    bool sgn = w == '-';
+    if (sgn) w = gc();
+    register int r = w&15;
+    while (is_digit[w = gc()]) {
+        r = (r<<3) + (r<<1) + (w&15);
+    }
+    return sgn ? -r : r;
+}
+ 
+unsigned int Reader::uint() {
+    char w;
+    while (!is_digit[w = gc()]);
+    register unsigned int r = w&15;
+    while (is_digit[w = gc()]) {
+        r = (r<<3) + (r<<1) + (w&15);
+    }
+    return r;
+}
+ 
+Writer::~Writer() {
+    fwrite(buffer, 1, cursor, stdout);
+}
+ 
+void Writer::pc(char c) {
+    buffer[cursor++] = c;
+    if (Config::OUTPUT_BUFFER_SIZE == cursor) {
+        fwrite(buffer, 1, Config::OUTPUT_BUFFER_SIZE, stdout);
+        cursor = 0;
+    }
+}
+ 
+void Writer::print(int x) {
+    register unsigned int u = 0, o[10]; 
+    do o[u++] = x%10; while (x /= 10); 
+    do pc(o[--u] + 48); while (u);
+    pc(32);
+}
+ 
+void Writer::println(long long x) {
+    register unsigned int u = 0, o[10]; 
+    do o[u++] = x%10; while (x /= 10); 
+    do pc(o[--u] + 48); while (u);
+    pc(10);
+}
+Language: C++
+
+
+
+
+
+
+
+
+
+
+SOLUTION:---------
+
+
+
+Let's assume that 
+sx<fx
+sx<fx. If this doesn't hold let's just swap start and finish.
+
+The path structure is always following:
+
+go up several steps (possibly zero)
+go right several steps (possibly zero)
+go down several steps (possibly zero)
+How much cells should we go up in the beginning? We should be higher than highest building between start and finish. Also we should be not lower that finish. Highest building can be found by segment tree by 
+m
+a
+x
+max operation on segment. Lets define the height of highest building as 
+H
+H.
+
+How much cell should we go right? Just the 
+f
+x
+-
+s
+x
+fx-sx.
+
+And in the end you have to add 
+H
+-
+f
+y
+H-fy if 
+H
+>
+f
+y
+H>fy. Because you are so high because of buildings.
+
+IS THIS EDITORIAL HELPFUL?
+Yes, it's helpful
+No, it's not helpful
+7 developer(s) found this editorial helpful.
+Author Solution by ???? ???????
+#include <iostream>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <set>
+#include <map>
+#include <cmath>
+#include <ctime>
+#include <functional>
+#include <sstream>
+#include <fstream>
+#include <valarray>
+#include <complex>
+#include <queue>
+#include <cassert>
+#include <bitset>
+using namespace std;
+#ifdef LOCAL
+	#define debug_flag 1
+#else
+	#define debug_flag 0
+#endif
+template <class T1, class T2 >
+std::ostream& operator << (std::ostream& os, const pair<T1, T2> &p) 
+{
+	os << "[" << p.first << ", " << p.second << "]";
+	return os;
+}
+template <class T >
+std::ostream& operator << (std::ostream& os, const std::vector<T>& v) 
+{
+	os << "[";
+	bool first = true;
+	for (typename std::vector<T>::const_iterator it = v.begin(); it != v.end(); ++it)
+	{
+		if (!first)
+			os << ", ";
+		first = false;
+		os << *it;
+	}
+	os << "]";
+	return os;
+}
+#define dbg(args...) { if (debug_flag) { _print(_split(#args, ',').begin(), args); cerr << endl; } else { void(0);} }
+vector<string> _split(const string& s, char c) {
+	vector<string> v;
+	stringstream ss(s);
+	string x;
+	while (getline(ss, x, c))
+		v.emplace_back(x);
+	return v;
+}
+void _print(vector<string>::iterator) {}
+template<typename T, typename... Args>
+void _print(vector<string>::iterator it, T a, Args... args) {
+    string name = it -> substr((*it)[0] == ' ', it -> length());
+    if (isalpha(name[0]))
+	    cerr << name  << " = " << a << " ";
+	else
+	    cerr << name << " ";
+	_print(++it, args...);
+}
+typedef long long int int64;
+const int pow2 = (1 << 19);
+const int N = (int)1e6;
+const int64 INF = (int64)1e18;
+struct Tree {
+  int64 max_val[pow2 * 2];
+  Tree() {
+    fill(max_val, max_val + 2 * pow2, -INF);
+  }
+  void relax_max(int pos, int64 val) {
+    pos += pow2;
+    max_val[pos] = max(max_val[pos], val);
+    pos /= 2;
+    while (pos >= 1) {
+      max_val[pos] = max(max_val[pos * 2], max_val[pos * 2 + 1]);
+      pos /= 2;
+    }
+  }
+  bool not_inter(int l, int r, int a, int b) {
+    return l > b || r < a;
+  }
+  bool is_in(int l, int r, int a, int b) {
+    return a <= l && r <= b;
+  }
+  int64 get_max(int a, int b) {
+    if (a > b) {
+      return -INF;
+    }
+    return get_max(1, 0, pow2 - 1, a, b);
+  }
+  int64 get_max(int v, int l, int r, int a, int b) {
+    if (not_inter(l, r, a, b)) {
+      return -INF;
+    }
+    if (is_in(l, r, a, b)) {
+      return max_val[v];
+    }
+    int m = (l + r) / 2;
+    return max(get_max(v * 2, l, m, a, b),
+        get_max(v * 2 + 1, m + 1, r, a, b));
+  }
+};
+int n, q;
+int64 x_list[N], y_list[N];
+int64 sx_list[N], sy_list[N], fx_list[N], fy_list[N];
+vector<int64> comp_list;
+Tree tree;
+int64 solve(int64 sx, int64 sy, int64 fx, int64 fy) {
+  if (sx > fx) {
+    swap(sx, fx);
+    swap(sy, fy);
+  }
+  int a = lower_bound(comp_list.begin(), comp_list.end(), sx) - comp_list.begin();
+  int b = upper_bound(comp_list.begin(), comp_list.end(), fx) - comp_list.begin() - 1;
+  int64 mx_between = tree.get_max(a, b);
+  int64 dist = fx - sx;
+  if (sy <= mx_between) {
+    dist += mx_between + 1 - sy;
+    sy = mx_between + 1;
+  }
+  dist += abs(sy - fy);
+  return dist;
+}
+int main()
+{
+#ifdef LOCAL
+	freopen ("input.txt", "r", stdin);
+#endif
+  scanf("%d%d", &n, &q);
+  for (int i = 0; i < n; i++) {
+    scanf("%lld%lld", &x_list[i], &y_list[i]);
+  }
+  for (int i = 0; i < q; i++) {
+    scanf("%lld%lld%lld%lld", &sx_list[i], &sy_list[i], &fx_list[i], &fy_list[i]);
+  }
+  for (int i = 0; i < n; i++) {
+    comp_list.push_back(x_list[i]);
+  }
+  sort(comp_list.begin(), comp_list.end());
+  comp_list.erase(unique(comp_list.begin(), comp_list.end()), comp_list.end());
+  for (int i = 0; i < n; i++) {
+    int pos = lower_bound(comp_list.begin(), comp_list.end(), x_list[i]) - comp_list.begin();
+    tree.relax_max(pos, y_list[i]);
+  }
+  for (int i = 0; i < q; i++) {
+    printf("%lld\n", solve(sx_list[i], sy_list[i], fx_list[i], fy_list[i]));
+  }
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include <stdio.h>
+#include <math.h>
+#include <limits.h>
+#include <stdlib.h>
+ 
+typedef struct {
+    int x;
+    int y;
+}cell;
+ 
+typedef struct {
+    cell ini;
+    cell fin;
+}pos;
+ 
+int maxVal(int x, int y) { return (x > y)? x: y; }
+ 
+int getMid(int s, int e) {  return s + (e -s)/2; }
+ 
+int RMQUtil(int *st, int ss, int se, int qs, int qe, int index)
+{
+    int tmp,left,right;
+    if (qs <= ss && qe >= se)
+        return st[index];
+ 
+    if (se < qs || ss > qe){
+		tmp=INT_MIN;
+		return tmp;
+	}
+        
+    int mid = getMid(ss, se);
+	left=RMQUtil(st, ss, mid, qs, qe, 2*index+1);
+	right=RMQUtil(st, mid+1, se, qs, qe, 2*index+2);
+	tmp=maxVal(left,right);
+    return tmp;
+}
+ 
+int RMQ(int *st, int n, int qs, int qe)
+{
+	
+    return RMQUtil(st, 0, n-1, qs, qe, 0);
+}
+ 
+void constructSTUtil(cell arr[], int ss, int se, int *st, int si)
+{
+    if (ss == se)
+    {
+        st[si] = arr[ss].y;
+        return ;
+    }
+ 
+    int mid = getMid(ss, se);
+	constructSTUtil(arr, ss, mid, st, si*2+1);
+    constructSTUtil(arr, mid+1, se, st, si*2+2);
+    st[si] = maxVal(st[si*2+1], st[si*2+2]);	
+}
+ 
+int *constructST(cell arr[], int n)
+{
+    int x = (int)(ceil(log2(n))); 
+    int max_size = 2*(int)pow(2, x) - 1; 
+    int *st = calloc(max_size,sizeof(int)); 
+    constructSTUtil(arr, 0, n-1, st, 0);
+ 
+    return st;
+}
+ 
+int cmp(const void *a,const void *b){
+	const cell *fs=a;
+	const cell *se=b;
+	return fs->x-se->x;
+}
+ 
+int srch(cell a[],int l,int r,int value) {
+ 
+        if(value < a[0].x) {
+            return 0;
+        }
+        if(value > a[r].x) {
+            return r;
+        }
+ 
+        int lo = 0;
+        int hi = r;
+ 
+        while (lo <= hi) {
+            int mid = (hi + lo) / 2;
+ 
+            if (value < a[mid].x) {
+                hi = mid - 1;
+            } else if (value > a[mid].x) {
+                lo = mid + 1;
+            } else {
+                return mid;
+            }
+        }
+        // lo == hi + 1
+        return (a[lo].x - value) < (value - a[hi].x) ? lo : hi;
+}
+int main()
+{
+    int n,q,i,j,miny=INT_MAX,maxy=INT_MIN;
+    long long ans;
+    cell *brec;
+    pos  *team;
+    scanf("%d %d",&n,&q);
+    brec=malloc(n*sizeof(cell));
+    team=malloc(q*sizeof(pos));
+    for(i=0;i<n;i++){
+       scanf("%d %d",&brec[i].x,&brec[i].y);
+       if(brec[i].y>maxy)
+          maxy=brec[i].y;
+	}
+	qsort(brec,n,sizeof(cell),cmp);
+	int *st = constructST(brec, n);
+ 
+	for(i=0;i<q;i++){
+	    ans=0;
+       scanf("%d %d %d %d",&team[i].ini.x,&team[i].ini.y,&team[i].fin.x,&team[i].fin.y);
+	   int max=0,l,r,tmp,set=0;
+	   int x1,x2,y1,y2;
+	   x1=team[i].ini.x;
+	   x2=team[i].fin.x;
+	   y1=team[i].ini.y;
+	   y2=team[i].fin.y;
+	   
+	   if(x2<x1){
+		   tmp=x2;
+		   x2=x1;
+		   x1=tmp;   
+	   }
+	   if(x1==x2)
+		   ans=abs(y2-y1);
+	   else
+	   {
+	        if(y1>maxy || y2>maxy)
+	           set=1;
+	        if(((x1<=brec[0].x && x2<=brec[0].x) || (x1>=brec[n-1].x && x2>=brec[n-1].x)) && set!=1){
+				ans+=abs(x2-x1);
+				ans+=abs(y2-y1);
+	        }
+			else
+			{
+				l=srch(brec,0,n-1,x1);
+                r=srch(brec,0,n-1,x2);
+                if(r-l<=1){
+                    if(brec[l].x<=x1 && brec[r].x>=x2)
+                    set=1;
+                    if(brec[l].x<=x1 && l<n-1 && set!=1)
+                       l++;
+                    if(brec[r].x>=x2 && r>0 && set!=1)
+                       r--;
+                    if(l==r){
+                        if((brec[l].x>x1 && brec[r].x>x2) || (brec[l].x<x1 && brec[l].x<x2))
+                           set=1;
+                    }
+                }
+                else{
+                    if(brec[l].x<x1)
+                       l++;
+                    if(brec[r].x>x2)
+                       r--;
+                }
+                        
+                max=RMQ(st, n, l, r);
+				if(max>=y1 && max>=y2 && set==0){
+					ans+=abs(x2-x1);
+					ans+=abs(max-y1);
+					ans+=abs(max-y2)+2;
+				}
+				else{
+					ans+=abs(x2-x1);
+					ans+=abs(y2-y1);
+				}
+			}
+						
+	   }
+	      printf("%lld\n",ans);
+	   
+	}
+	
+	return 0;
+}
+Language: C

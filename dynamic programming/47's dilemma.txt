@@ -1,0 +1,145 @@
+#include <bits/stdc++.h>
+using namespace std;
+ 
+int p[1010], o[1010], y[1010];
+ 
+int solution[1010][3];
+ 
+int solve(int n) {
+	solution[0][0] = p[0];
+	solution[0][1] = o[0];
+	solution[0][2] = y[0];
+	
+	for(int i = 1; i < n ;i++) {
+		solution[i][0] = p[i] + min(solution[i-1][1], solution[i-1][2]);
+		solution[i][1] = o[i] + min(solution[i-1][0], solution[i-1][2]);
+		solution[i][2] = y[i] + min(solution[i-1][1], solution[i-1][0]);
+	}
+	int m;
+	m = min(solution[n-1][0], solution[n-1][1]);
+	m = min(m ,solution[n-1][2]);
+	return m;
+}
+ 
+int main() {
+	//freopen("10.txt","r",stdin);
+	//freopen("10a.txt","w",stdout);
+	
+	int t,n,x;
+	scanf("%d", &t);
+	while(t--) {
+		memset(solution,-1,sizeof(solution));
+		scanf("%d",&n);
+		scanf("%d",&x);
+		for(int i = 0; i < n; i++) {
+			scanf("%d%d%d", &p[i],&o[i],&y[i]);
+		}
+		int ans=solve(n);
+		if(ans<=x)
+		{
+			cout<<"YES"<<endl;
+			cout<<x-ans<<endl;
+		}
+		else
+		{
+			cout<<"NO"<<endl;
+			cout<<ans-x<<endl;
+		}
+		
+	}
+	return 0;
+}
+
+
+
+
+******************************************************************************************
+********************************************
+*
+**************************************************
+
+
+*******************************************************************************************
+#include <bits/stdc++.h>
+using namespace std;
+ 
+int main()
+{
+    int t;
+    cin>>t;
+    while(t--)
+    {
+        int n,x;
+        cin>>n>>x;
+        int a[3]={0};
+        for(int i=0;i<n;i++)
+        {
+            int l,m,n;
+            cin>>l>>m>>n;
+            if(i!=0)
+ 
+            {
+                l+=min(a[1],a[2]);
+                m+=min(a[0],a[2]);
+                n+=min(a[1],a[0]);
+ 
+            }
+            a[0]=l,a[1]=m,a[2]=n;
+        }
+        int mn=min(a[0],min(a[1],a[2]));
+        if(mn>x)
+        cout<<"NO"<<endl;
+        else
+        cout<<"YES"<<endl;
+        cout<<abs(x-mn)<<endl;
+    }
+    return 0;
+}
+
+*********************************************************************************88
+*********************************************************************************
+*************************************************************************************
+#include<bits/stdc++.h>
+using namespace std;
+ 
+int func(int a1[1001],int a2[1001],int a3[1001],int dp[1001][4],int N,int prev=0,int i=0)
+{
+    if(i==N)
+        return 0;
+    if(dp[i][prev]==-1)
+    {
+        int opt1=INT_MAX,opt2=INT_MAX,opt3=INT_MAX;
+        if(prev!=1)
+            opt1=func(a1,a2,a3,dp,N,1,i+1)+a1[i];
+        if(prev!=2)
+            opt2=func(a1,a2,a3,dp,N,2,i+1)+a2[i];
+        if(prev!=3)
+            opt3=func(a1,a2,a3,dp,N,3,i+1)+a3[i];
+        dp[i][prev]=min(opt1,min(opt2,opt3));
+    }
+    return dp[i][prev];
+}
+int main()
+{
+    ios::sync_with_stdio(false);
+    int T;
+    cin>>T;
+    while(T--)
+    {
+        int N;
+        cin>>N;
+        int a1[1001],a2[1001],a3[1001];
+        int maxamount;
+        cin>>maxamount;
+        for(int i=0;i<N;i++)
+            cin>>a1[i]>>a2[i]>>a3[i];
+        int dp[1001][4];
+        for(int i=0;i<=1000;i++)
+            dp[i][0]=dp[i][1]=dp[i][2]=dp[i][3]=-1;
+        int answer=func(a1,a2,a3,dp,N);
+        if(answer>maxamount)
+            cout<<"NO"<<endl<<answer-maxamount<<endl;
+        else
+            cout<<"YES"<<endl<<maxamount-answer<<endl;
+    }
+}

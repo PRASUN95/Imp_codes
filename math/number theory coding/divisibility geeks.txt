@@ -1,0 +1,276 @@
+#include <iostream>
+
+#include <bits/stdc++.h>
+
+#define lli long long int
+
+using namespace std;
+
+
+
+void recurse(vector<int> nums,vector<vector<int> >& ans, vector<int>& partial, int index, int count)
+
+{
+ 
+  
+ if(count==0)
+ 
+   {
+    
+    
+ans.push_back(partial);
+  
+      return;
+    
+}
+    
+for(int i=index;i<nums.size();i++)
+  
+  {
+      
+  partial.push_back(nums[i]);
+ 
+       recurse(nums,ans,partial,i+1,count-1);
+ 
+       partial.pop_back();
+  
+  }
+
+}
+
+vector<vector<int> > combinations(vector<int> nums,int k)
+
+{
+  
+  vector<vector<int> > ans;
+   
+ vector<int> partial;
+  
+  recurse(nums,ans,partial,0,k);
+ 
+   return ans;
+
+}
+
+
+lli prod(vector<int> nums)
+
+{
+   
+ lli ans=1;
+  
+  for(auto x:nums)
+  
+      ans*=x;
+  
+  return ans;
+
+}
+
+int lcm(vector<int> nums)
+{
+  
+  lli pp = prod(nums);
+ 
+   lli gcd;
+   
+ if(nums.size()==1)
+ 
+       gcd = 1;
+   
+ else
+   
+ {
+       
+ gcd = pp/nums[0];
+  
+      for(int j = 1;j<nums.size();j++)
+   
+         gcd = __gcd(gcd,pp/nums[j]);
+
+    }
+   
+ lli lcm = pp/gcd;
+ 
+   return lcm;
+
+}
+
+lli divisor(vector<int> nums,lli k)
+
+{
+   
+ int n = nums.size();
+ 
+   lli total = 0;
+  
+  for(int i = 1;i<1<<n;i++)
+
+    {
+        
+int parity = __builtin_popcount(i)%2;
+  
+      vector<int> temp;
+   
+     for(int j=0;j<n;j++)
+   
+     {
+           
+ if(i>>j&1)
+       
+         temp.push_back(nums[n-1-j]);
+ 
+       }
+      
+  lli this_contrib = k/lcm(temp);
+  
+      // cout<<"this contrib s "<<this_contrib<<endl;
+     
+   total+=(lli)(parity==0 ? -1 : 1)*this_contrib;
+    
+}
+    return total;
+
+
+}
+
+int main() 
+{
+  
+  int t,n;
+  
+  lli k;
+    
+cin>>t;
+   
+ for(int tc=0;tc<t;tc++)
+ 
+   {
+ 
+       cin>>n;
+
+        vector<int> arg(n,0);
+        
+for(int i=0;i<n;i++)
+     
+       cin>>arg[i];
+       
+ cin>>k;
+     
+   cout<<divisor(arg,k)<<endl;
+ 
+   }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+//* ______________________________________________________________________
+
+    * count of numbers divisible by a list of numbers given
+//* ______________________________________________________________________
+
+ */
+
+#include <iostream>
+#include <vector>
+typedef long long ll;
+#define pii                pair<int,int>
+#define pll                pair<ll,ll>
+#define pdd                pair<double,double>
+#define X                  first
+#define Y                  second
+#define gc                 getchar
+#define pc                 putchar
+#define LOOPI(i,a)         for(int i=0;i<a;++i)
+#define LOOPD(i,a)         for(int i=a;i>=0;--i)
+#define LOOPI1(i,a,b)      for(int i=a;i<b;++i)
+#define FILL(a,x)          memset(a,x,sizeof(a))
+#define	foreach( gg,itit ) for( typeof(gg.begin()) itit=gg.begin();itit!=gg.end();itit++ )
+#define	mp                 make_pair
+#define	pb                 push_back
+#define eb                 emplace_back
+#define pob                pop_back
+#define all(s)             s.begin(),s.end()
+#define present(c,x)       ((c).find(x) != (c).end())
+using namespace std;
+
+inline void rdi(int &n) { n=0; char c=gc(); while(c<'0' or c>'9') c=gc(); while(c>='0' and c<='9') { n=(n<<3)+(n<<1)+c-'0'; c=gc(); }}
+inline void rdl(ll &n) { n=0; char c=gc(); while(c<'0' or c>'9') c=gc(); while(c>='0' and c<='9') { n=(n<<3)+(n<<1)+c-'0'; c=gc(); }}
+inline void print(int a) { char s[20]; int i=0; do { s[i++]=a%10+'0'; a/=10; } while(a); i--; while(i>=0) pc(s[i--]); pc('\n'); }
+inline void prlong(ll a) { char s[20]; int i=0; do { s[i++]=a%10+'0'; a/=10; } while(a); i--; while(i>=0) pc(s[i--]); pc('\n'); }
+ll n,k,x;
+vector<int>vec;
+ll hcf(ll a,ll b)
+{
+    if(b==0)return a;
+    else return(hcf(b,a%b));
+}
+ll lcm(ll a,ll b)
+{
+    return(a*b/hcf(a,b));
+}
+void getCount(ll n, vector<int> vec,ll in ,ll curr,ll cnt,ll *sol)
+{
+
+  if(in==vec.size())
+  {
+    if(curr==1)return;
+    else
+     {
+      if(cnt%2==1) (*sol) += n/curr;
+      else (*sol)-= n/curr;
+     }
+  }
+   else if(curr>n||curr<0)return;
+   else
+   {
+    getCount(n,vec,in+1,lcm(curr,vec[in]),cnt+1,sol);
+    getCount(n,vec,in+1,curr,cnt,sol);
+   }
+}
+
+int main()
+{
+    std::ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    int t;
+    cin>>t;
+    while(t--)
+    {
+        vec.clear();
+        cin>>k;
+        bool has1=false;
+        for(int i=0;i<k;i++)
+        {
+            cin>>x;
+            vec.eb(x);
+            if(x==1)has1=true;
+        }
+        cin>>n;
+        if(has1)
+        {
+            cout<<n<<"\n";
+            continue;
+        }
+        int curr=1,in=0,cnt=0;
+        ll sol=0;
+        getCount(n,vec,in,curr,cnt,&sol);
+
+        cout<<sol<<"\n";
+       
+    }
+    return 0;
+}

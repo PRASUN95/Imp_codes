@@ -1,0 +1,33 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define mod 1000000007
+long gcd(long a, long b){  return(b?gcd(b,a%b):a);  }
+int binpow(long a, long b){
+    int t=1;
+    while(b){
+        if(b&1) t= t*a%mod;
+        a=a*a%mod; b>>=1;
+    }return t;
+}
+int main()
+{
+    //cout << "Hello World!" << endl;
+    long n;
+    cin >> n;
+    long a[n];
+    for(long i=0;i<n;i++)cin >> a[i];
+    long x = a[0];
+    for(long i=1;i<n;i++)
+        {
+            x = gcd(x,a[i]);
+        }
+        long prod=1;
+    for(long i=0;i<n;i++)
+        {
+            prod = ((prod % mod) * (a[i] % mod)) % mod;
+        }
+    long res = binpow(prod,x) % mod;
+    cout << res;
+    return 0;
+}
+Language: C++

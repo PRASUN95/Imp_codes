@@ -1,0 +1,137 @@
+https://www.hackerearth.com/practice/data-structures/arrays/1-d/practice-problems/algorithm/sumit-and-equal-array/
+
+#include <stdio.h>
+int main()
+{
+    int t,n,flag,var[3],i,j,r,q,a[100000];
+    int num;
+    scanf("%d",&t);
+    while(t--)
+    {
+        flag=0;
+        scanf("%d%d%d%d",&n,&var[0],&var[1],&var[2]);
+        for(i=0;i<n;i++)
+        {
+            scanf("%d",&num);
+            for(j=0;j<3;j++)
+            {
+                while(num%var[j]==0)
+                {
+                    num/=var[j];
+                }
+            }
+            a[i]=num;
+        }
+        for(i=0;i<n-1;i++)
+        {
+            if(a[i]!=a[i+1])
+            {
+                flag=1;
+                break;
+            }
+        }
+        if(flag==0)
+        printf("She can\n");
+        else
+        printf("She can't\n");
+    }
+    return 0;
+}
+Language: C
+
+
+/* ALTERNATIVE         */
+
+
+#include <bits/stdc++.h>
+using namespace std;
+ 
+typedef long long ll;
+#define pi(x) printf("%d ",x)
+#define pll(x) printf("%lld ",x)
+#define endl() printf("\n")
+#define mp make_pair
+#define pb push_back
+#define fr first
+#define se second
+#define M 1000000007
+ 
+int main()
+{
+    int t,n,i,j,x,y,z;
+    cin >> t;
+    while(t--)
+    {
+        cin >> n >> x >> y >> z;
+        vector<int> a(n);
+        unordered_set<int> s,s2,s3,s5,s7;
+        s.insert(x);
+        s.insert(y);
+        s.insert(z);
+        bool ok=true;
+        for(i=0;i<n;i++)
+        {
+            cin >> a[i];
+            j=0;
+            while(a[i]%2==0)
+            {
+                a[i]/=2;
+                j++;
+            }
+            s2.insert(j);
+            j=0;
+            while(a[i]%3==0)
+            {
+                a[i]/=3;
+                j++;
+            }
+            s3.insert(j);
+            j=0;
+            while(a[i]%5==0)
+            {
+                a[i]/=5;
+                j++;
+            }
+            s5.insert(j);
+            j=0;
+            while(a[i]%7==0)
+            {
+                a[i]/=7;
+                j++;
+            }
+            s7.insert(j);
+        }
+        for(i=1;i<n;i++)
+        {
+            if(a[i]!=a[i-1])
+            {
+                ok=false;
+            }
+        }
+        if(s2.size()>1 && s.find(2)==s.end())
+        {
+            ok=false;
+        }
+        if(s3.size()>1 && s.find(3)==s.end())
+        {
+            ok=false;
+        }
+        if(s5.size()>1 && s.find(5)==s.end())
+        {
+            ok=false;
+        }
+        if(s7.size()>1 && s.find(7)==s.end())
+        {
+            ok=false;
+        }
+        if(ok)
+        {
+            cout << "She can" << endl;
+        }
+        else
+        {
+            cout << "She can't" << endl;
+        }
+    }
+}
+Language: C++14

@@ -1,0 +1,77 @@
+/*
+Author: Shadow007
+*/
+#include<bits/stdc++.h>
+ 
+using namespace std;
+/*typedef*/
+typedef unsigned int uint;
+typedef long long lld;
+typedef unsigned long long ulld;
+typedef double lf;
+typedef long double llf;
+typedef pair<int,int> pii;
+typedef pair<lld,lld> plld;
+ 
+/*define*/
+#define mod 1000000007
+#define ff first
+#define ss second
+#define mp(a,b) make_pair(a,b)
+#define pb push_back
+#define pf push_front
+#define pob pop_back
+#define pof pop_front
+#define fl(i,a,b) for(int i=a;i<=b;i++)
+#define rfl(i,a,b) for(int i=a;i>=b;i--)
+lld rmq(int l,int r,vector<lld> &st,int n){
+    lld ans=-mod;
+    for(l+=n,r+=n;l<r;l>>=1,r>>=1){
+        if(l&1) ans=max(ans,st[l++]);
+        if(r&1) ans=max(ans,st[--r]);
+    }
+    return ans;
+}
+int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    int n,q;
+    cin>>n>>q;
+    vector<pair<lld,lld>> v(n);
+    fl(i,0,n-1){
+        cin>>v[i].ff>>v[i].ss;
+    }
+    sort(v.begin(),v.end());
+    lld x1,x2;
+    lld y1,y2;
+    vector<lld> st(2*n);
+    fl(i,n,2*n-1){
+        st[i]=v[i-n].ss;
+    }
+    rfl(i,n-1,1){
+        int k=i<<1;
+        st[i]=max(st[k],st[k+1]);
+    }
+    lld min=-1000000000000;
+    while(q--){
+        cin>>x1>>y1>>x2>>y2;
+        if(x1>x2){
+            swap(x1,x2);
+            swap(y1,y2);
+        }
+        lld x1u=(upper_bound(v.begin(),v.end(),mp(x1,min))-v.begin());
+        lld x2u=(upper_bound(v.begin(),v.end(),mp(x2,min))-v.begin()-1);
+        lld ans;
+        if(x1u>x2u){
+            ans=abs(x2-x1)+abs(y2-y1);
+        }
+        else{
+            lld temp=rmq(x1u,x2u+1,st,n);
+            if(temp>=max(y1,y2)) ans=abs(x2-x1)+abs(temp+1-y1)+abs(temp+1-y2);
+            else ans=abs(x2-x1) + abs(y2-y1);
+        }
+        cout<<ans<<endl;
+    }
+return 0;
+} 

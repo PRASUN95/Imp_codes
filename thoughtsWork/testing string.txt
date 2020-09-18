@@ -1,0 +1,195 @@
+import java.io.*;
+import java.util.*;
+import java.math.*;
+import java.util.concurrent.*;
+public final class testing_strings
+{
+    static BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+	static FastScanner sc=new FastScanner(br);
+    static PrintWriter out=new PrintWriter(System.out);
+	static Random rnd=new Random();
+	static long mod=(long)(1e6+3);
+	static ArrayList<Pair>[] al;
+	
+	@SuppressWarnings("unchecked")
+    public static void main(String args[]) throws Exception
+    {
+		int n=sc.nextInt(),m=sc.nextInt(),k=sc.nextInt();
+		
+		char[] a=new char[m];al=new ArrayList[m];
+		
+		for(int i=0;i<m;i++)
+		{
+			al[i]=new ArrayList<>();
+		}
+		
+		for(int i=0;i<n;i++)
+		{
+			int l=sc.nextInt()-1,r=sc.nextInt()-1,x=sc.nextInt()-1;
+			
+			al[l].add(new Pair(1,x));
+			
+			if(r+1<m)
+			{
+				al[r+1].add(new Pair(-1,x));
+			}
+		}
+		
+		int[] sum=new int[k];long res=1;long ctr=k;
+		
+		for(int i=0;i<m;i++)
+		{
+			for(Pair x:al[i])
+			{
+				sum[x.val]+=x.add;
+				
+				if(sum[x.val]==1)
+				{
+					ctr--;
+				}
+				
+				if(sum[x.val]==0)
+				{
+					ctr++;
+				}
+			}
+			
+			res=(res*ctr)%mod;
+		}
+		
+		out.println(res);out.close();
+    }
+	
+	private static class Pair
+	{
+		int add,val;
+		
+		public Pair(int add,int val)
+		{
+			this.add=add;this.val=val;
+		}
+	}
+}
+class FastScanner
+{
+    BufferedReader in;
+    StringTokenizer st;
+    public FastScanner(BufferedReader in) {
+        this.in = in;
+    }
+	
+    public String nextToken() throws Exception {
+        while (st == null || !st.hasMoreTokens()) {
+            st = new StringTokenizer(in.readLine());
+        }
+        return st.nextToken();
+    }
+	
+	public String next() throws Exception {
+		return nextToken().toString();
+	}
+	
+    public int nextInt() throws Exception {
+        return Integer.parseInt(nextToken());
+    }
+    public long nextLong() throws Exception {
+        return Long.parseLong(nextToken());
+    }
+    public double nextDouble() throws Exception {
+        return Double.parseDouble(nextToken());
+    }
+}
+
+
+
+
+
+
+
+    #include <bits/stdc++.h>
+    using namespace std;
+     
+    #define boost ios::sync_with_stdio(false);cin.tie(NULL)
+    #define ll long long
+    #define ull unsigned long long
+    #define pll pair<ll,ll>
+    #define pb push_back
+    #define mp make_pair
+    #define fs first
+    #define sc second
+    const ll MOD=1E6+3;
+    const ll N=1E5+6;
+     
+    ll n,m,k;
+    vector<pll> intv[N];
+    ll a[N];
+     
+    void merge(ll i)
+    {
+    	if (!intv[i].size())
+    		return;
+     
+    	vector<pll> ans;
+    	ll f=0;
+    	ans.pb(intv[i][0]);
+     
+    	ll j;
+    	for (j=1;j<intv[i].size();j++) {
+    		if (ans[f].sc>=intv[i][j].fs) {
+    			ans[f].sc=max(ans[f].sc,intv[i][j].sc);
+    		}
+    		else {
+    			ans.pb(intv[i][j]);
+    			f++;
+    		}
+    	}
+     
+    	intv[i]=ans;
+    }
+     
+    int main()
+    {
+        boost;
+        if(fopen("inp.txt", "r")) {
+          freopen("inp.txt", "r", stdin);
+          freopen("outp.txt", "w", stdout);
+        }
+     
+        cin>>n>>m>>k;
+     
+        ll i,l,r,z;
+        for (i=1;i<=n;i++) {
+        	cin>>l>>r>>z;
+     
+        	intv[z].pb(mp(l,r));
+        }
+     
+        for (i=1;i<=k;i++)
+        	sort(intv[i].begin(),intv[i].end());
+     
+        for (i=1;i<=k;i++)
+        	merge(i);
+     
+        for (i=1;i<=k;i++) {
+     
+        	for (auto p: intv[i]) {
+     
+        		l=p.fs,r=p.sc;
+     
+        		a[l]++;
+        		a[r+1]--;
+        	}
+        }
+     
+        for (i=1;i<=m;i++)
+        	a[i]+=a[i-1];
+     
+        ll ans=1;
+        for (i=1;i<=m;i++)
+        	ans=(ans*(k-a[i]))%MOD;
+     
+        cout<<ans<<endl;
+     
+        return 0;
+    }
+Language: C++

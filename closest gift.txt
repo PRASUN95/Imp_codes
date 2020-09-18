@@ -1,0 +1,32 @@
+#include <iostream>
+#include<stdio.h>
+using namespace std;
+ 
+int main()
+{
+    long int n;
+    long int i;
+    scanf("%ld",&n);
+    long int prime;
+    if(n==0||n==1)
+        prime=2;
+    else{
+    for(i=n;;i++)
+    {
+        int j;
+        for(j=2;j*j<=i;j++)
+        {
+            if(i%j==0)
+                break;
+        }
+        if(j*j>i)
+        {
+            prime=i;
+            break;
+        }
+    }
+    }
+    printf("%ld",(prime-n));
+    return 0;
+}
+Language: C++

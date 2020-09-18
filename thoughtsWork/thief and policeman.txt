@@ -1,0 +1,246 @@
+
+
+#include<bits/stdc++.h>
+using namespace std;
+int valid(int x,int n)
+{
+    if(x >= 0 && x < n)return x;
+    else if(x<0)return 0;
+    else if(x > n-1)return n-1;
+}
+int solution (vector<vector<char> > A, int k,int N) {
+   int cnt=0,f=0,temp;
+   for (int i=0;i<N;i++)
+    {
+        f=0;
+        for(int j=0;j<N;j++)
+        {
+            f=0;
+            if(A[i][j] == 'P')
+                {
+                    for(int x = valid(j-k,N) ; x < j ; x++)
+                        {
+                            if(A[i][x] == 'T')
+                                {
+                                    cnt++;
+                                    A[i][x] = 'x';
+                                    A[i][j] = 'x';
+                                    f=1;
+                                    break;
+                                }
+                        }
+                    if(f == 0)
+                        {
+                            for(int x = j + 1 ; x <=valid(j+k,N) ; x++)
+                            {
+                            if(A[i][x] == 'T')
+                                {
+                                    A[i][x] = 'x';
+                                    A[i][j] = 'x';
+                                    cnt++;
+                                    break;
+                                }
+                            }
+                        }
+                }
+        }
+     //   cout << cnt << endl;
+    }
+    return cnt;
+}
+ 
+int main() {
+ 
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    int T;
+    cin >> T;
+    for(int t_i=0; t_i<T; t_i++)
+    {
+        int N;
+        cin >> N;
+        int K;
+        cin >> K;
+        vector<vector<char> > A(N, vector<char>(N));
+        for (int i_A=0; i_A<N; i_A++)
+        {
+        	for(int j_A=0; j_A<N; j_A++)
+        	{
+        		cin >> A[i_A][j_A];
+        	}
+        }
+ 
+        int out_;
+        out_ = solution(A, K ,N);
+        cout << out_;
+        cout << "\n";
+    }
+}
+Language: C++
+
+
+
+
+
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+    int arr[20000],l;
+    vector<int>v;
+    vector<int> :: iterator it;
+    string str;
+    int t,i,j,k,n;
+    scanf("%d",&t);
+    for(i=0;i<t;i++)
+    {
+        int c=0;
+        scanf("%d %d",&n,&k);
+       
+        for(j=1;j<=n;j++)
+        {
+             int m=-1;
+            v.clear();
+            for(l=1;l<=n;l++)
+            {
+                cin>>str;
+                //cout<<str<<endl;
+                if(str=="T")
+                v.push_back(l);
+                else
+                {
+                    m++;
+                    arr[m]=l;
+                }
+            }
+            for(l=0;l<=m;l++)
+            {
+                it=lower_bound(v.begin(),v.end(),arr[l]-k);
+                if(it!=v.end() && *it<=arr[l]+k)
+                {
+                c++;
+                v.erase(it);
+                }
+            }
+        }
+        printf("%d\n",c);
+    }
+    return 0;
+}
+Language: C++
+
+
+
+
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+ 
+int solution (vector<vector<char> > A, int K) {
+    int cnt = 0;
+    int n = A.size();
+    
+    for(int line = 0; line < n; ++line) {
+        
+        for(int i = 0, j = 0; i < n && j < n; ++i)
+            if(A[line][i] == 'P') {
+                
+                for(; j < n; ++j)
+                    if(A[line][j] == 'T') {
+                        
+                        if(j < i) {
+                            A[line][j] = 'x';
+                            if(i - j <= K) {
+                                ++cnt;
+                                break;
+                            }
+                        }
+                        else if(j - i <= K){
+                            ++cnt;
+                            A[line][j] = 'x';
+                            break;
+                        }
+                        else
+                            break;
+                    }
+            }
+    }
+   
+    return cnt;
+ 
+}
+ 
+int main() {
+ 
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    int T;
+    cin >> T;
+    for(int t_i=0; t_i<T; t_i++)
+    {
+        int N;
+        cin >> N;
+        int K;
+        cin >> K;
+        vector<vector<char> > A(N, vector<char>(N));
+        for (int i_A=0; i_A<N; i_A++)
+        {
+        	for(int j_A=0; j_A<N; j_A++)
+        	{
+        		cin >> A[i_A][j_A];
+        	}
+        }
+ 
+        int out_;
+        out_ = solution(A, K);
+        cout << out_;
+        cout << "\n";
+    }
+}
+Language: C++14
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+int main() {
+ 
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    int T;
+    cin >> T;
+    for(int t_i=0; t_i<T; t_i++)
+    {
+        int N;
+        cin >> N;
+        int K;
+        cin >> K;
+        vector<vector<char> > A(N, vector<char>(N));
+        for (int i_A=0; i_A<N; i_A++)
+        {
+        	for(int j_A=0; j_A<N; j_A++)
+        	{
+        		cin >> A[i_A][j_A];
+        	}
+        }
+ 
+        int out_;
+        out_ = solution(A, K ,N);
+        cout << out_;
+        cout << "\n";
+    }
+}
+Language: C++

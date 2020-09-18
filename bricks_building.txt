@@ -1,0 +1,61 @@
+#include <bits/stdc++.h>
+ 
+using namespace std;
+	
+typedef long long unsigned llu;
+typedef long long int lld;
+typedef long ld;
+typedef unsigned int ui;
+ 
+#define REP(i,n)        for(int i=0;i<(n);++i)
+#define FOR(i,a,b)      for(int i=(a);i<=(b);++i)
+#define FORD(i,a,b)     for(int i=(a);i>=(b);--i)
+ 
+#define MOD 		1000000007
+#define MAX 	    100005
+#define ff 			first
+#define ss 			second
+#define clr 		clear()
+#define square(x) ((x)*(x))
+#define pb 			push_back
+#define mp 			make_pair
+#define gcd(a,b)  	__gcd(a,b)
+#define sz(a) 		((int)(a.size()))
+#define len(a) 		((int)a.length())
+#define mem(i,n) 	memset(i,n,sizeof(i))
+#define IOS 		ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+#define IN          int t; cin >> t; while(t--)
+#define CJIN		int t; cin >> t;for(int tc = 1 ; tc<=t ; ++tc)
+#define CJOP(ans)	cout << "Case #" << tc << ": " << ans << '\n';    
+ 
+int A[MAX];
+ 
+void Fact(int n)
+{
+    int l = sqrt(n);
+    for(int i = 1;i <= l; ++i)
+    {
+        if(!(n%i)){
+            A[i]++;
+            if(i * i != n) A[n/i]++;
+        }
+    }
+}
+ 
+int main()
+{
+    IOS;
+	int n;
+    IN
+    {
+		cin >> n;
+		Fact(n);
+	}
+	cin >> t;while(t--)
+	{
+	    cin >> n;
+	    cout << A[n] << '\n';
+	}
+    return 0;    
+}
+Language: C++

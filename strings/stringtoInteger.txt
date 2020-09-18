@@ -1,0 +1,39 @@
+#include<bits/stdc++.h>
+using namespace std;
+int myAtoi(string str)
+{
+    int res = 0;
+ 
+
+    for (int i = 0; str[i] != '\0'; ++i)
+        res = res*10 + str[i] - '0';
+ 
+    return res;
+}
+void solution(string x,string y) {
+    string a=x,b=y;
+     for(int i=0;i<x.length();i++)
+        {
+            if(x[i]=='5')x[i]='6';
+            if(x[i]=='6')a[i]='5';
+        }
+    for(int i=0;i<y.length();i++)
+        {
+            if(y[i]=='5')y[i]='6';
+            if(y[i]=='6')b[i]='5';
+        }
+    int num1=myAtoi(x);
+    int num2=myAtoi(y);
+    int num3=myAtoi(a);
+    int num4=myAtoi(b);
+    cout<<num1+num2;
+    cout<<" "<<num3+num4;
+}
+
+// Following is the part of the program and is provided as an assistance to read the input.
+int main(){
+    string X,Y;
+cin>>X>>Y;
+    solution(X,Y);
+    return 0;
+} 

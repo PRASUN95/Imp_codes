@@ -1,0 +1,64 @@
+#include <iostream>
+#include <cstring>
+using namespace std;
+ 
+int main()
+{
+    int t;
+    cin>>t;
+    while(t--)
+    {
+    	char arr[100001] = {0};
+    	char arr1[100001] = {0};
+    	cin>>arr>>arr1;
+    	int a[26] = {0};
+    	int l = strlen(arr);
+    	int l1 = strlen(arr1);
+    	int sum = 0;
+    	
+    	for(int i = 0;i<l;i++)
+    	a[arr[i]-97]+=1;
+    	for(int i = 0;i<l1;i++)
+    	a[arr1[i]-97]-=1;
+    	for(int i = 0;i<26;i++)
+    	{
+    		
+    		sum+=abs(a[i]);
+    	}
+    	cout<<sum<<endl;
+    }
+    return 0;
+}
+Language: C++
+
+
+
+t = int(input())
+for _ in range(t):
+    S = list(input());
+    T = list(input());
+    c = list("abcdefghijklmnopqrstuvwxyz")
+    ans = 0
+    for i in range(26):
+        ans += abs(S.count(c[i]) - T.count(c[i]))
+    print(ans)
+    
+Language: Python 3
+
+
+
+
+T = int(input())
+from collections import Counter
+ 
+def strFreq(s):
+    return Counter(s)
+    
+ 
+for _ in range(T):
+    a = strFreq(input())
+    b = strFreq(input())
+    total = sum((a - b).values()) + sum((b - a).values())
+    
+    print(total)
+Language: Python 3

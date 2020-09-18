@@ -1,0 +1,115 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+    int n;
+    cin >> n;
+    pair<int,int>a[n+1];
+    int t,d;
+    for(int i=1;i<=n;i++)
+    {
+        cin >> t >> d;
+        a[i].first = t+d; 
+        a[i].second = i;
+    }
+    sort(a,a+n+1);
+    for(int i=1;i<=n;i++)
+        cout << a[i].second << " ";
+    return 0;
+}
+Language: C++
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include <bits/stdc++.h>
+#define boost ios_base::sync_with_stdio(false);cin.tie(NULL)
+#define ll long long int
+#define mod 1000000007
+#define llt ll t;cin>>t;while(t--)
+#define pb push_back
+#define fi first
+#define se second
+#define all(v) v.begin(),v.end()
+#define allr(v) v.rbegin(),v.rend()
+#define rep(i,a,b) for (ll i = a; i<b; ++i)
+using namespace std;
+bool cmp(pair<ll,ll>p1, pair<ll,ll>p2){
+ll a1 = p1.fi;
+ll b1 = p1.se;
+ll a2 = p2.fi;
+ll b2 = p2.se;
+if(a1<a2){
+return true;
+}
+else if(a1 == a2){
+if(b1<b2){
+return true;
+}
+return false;
+}
+return false;
+}
+ 
+int main()
+{
+boost;
+ 
+ll ti,di;
+std::vector<pair<ll,ll> > v;
+ll n;
+cin>>n;
+rep(i,0,n){
+cin>>ti>>di;
+v.pb(make_pair(ti+di,i+1));
+}
+sort(all(v),cmp);
+rep(i,0,n){
+cout<<v[i].se<<" ";
+}
+return 0;
+}
+Language: C++
+
+
+
+
+
+
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+map<long long int,pair<long long int,long long int > > mp;
+long long int N,M,Q;
+scanf("%lld %lld",&N,&M);
+for(int A=0;A<N;A++)
+for(int B=0;B<M;B++)
+{
+long long int X;
+scanf("%lld ",&X);
+mp.insert(make_pair(X,make_pair(A,B)));
+}
+scanf("%lld",&Q);
+while(Q--)
+{
+int O;
+scanf("%lld ",&O);
+if(mp.count(O)==0) printf("-1 -1\n");
+else printf("%lld %lld\n",mp[O].first,mp[O].second);
+}
+return 0;
+}
+

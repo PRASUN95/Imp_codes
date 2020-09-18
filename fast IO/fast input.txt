@@ -1,0 +1,34 @@
+void scanint(int &x)
+{
+ register int c = gc();
+    x = 0;
+    int neg = 0;
+    for(;((c<48 || c>57) && c != '-');c = gc());
+    if(c=='-') {neg=1;c=gc();}
+    for(;c>47 && c<58;c = gc()) {x = (x<<1) + (x<<3) + c - 48;}
+    if(neg) x=-x;
+}
+
+
+
+Alternative
+
+int scan()
+{
+
+    register int c = getchar_unlocked();
+
+    register int n = 0;
+  
+  for( ; (c<48 || c>57); c = getchar_unlocked() );
+
+    for( ; (c>47 && c<58); c = getchar_unlocked() )
+{
+      
+  n = (n<<1) + (n<<3) +c -48;
+   
+ }   
+    
+return n;
+
+}

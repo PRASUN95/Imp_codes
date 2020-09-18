@@ -1,0 +1,44 @@
+#include <iostream>
+    using namespace std;
+    int scan(){
+    	register int c = getchar_unlocked();
+        int n = 0;
+        for( ; (c<48 || c>57); c = getchar_unlocked() );
+        for( ; (c>47 && c<58); c = getchar_unlocked() ){
+            n = (n<<1) + (n<<3) +c -48;
+        }
+        return n;
+    }
+    void scan1(){
+    	register int c = getchar_unlocked();
+        for( ; (c<48 || c>57); c = getchar_unlocked() );
+        for( ; (c>47 && c<58); c = getchar_unlocked() );
+    }
+    int main()
+    {
+        int n,q;
+        n=scan();
+        q=scan();
+      //cin>>n>>q;
+        int a[n];
+        int i,j;
+        int x,l,r;
+        for(i=0;i<n;i++) a[i]=scan();
+        while(q){
+        	x=scan();
+        	if(x==1){
+        		l=scan();
+        		//cin>>l;
+        		a[l-1]=(a[l-1]+1)%2;
+        	}
+        	else {
+        		scan1();
+        		r=scan();
+        		//cin>>l>>r;
+        		if(a[r-1]==1) printf("ODD\n");
+        		else if(a[r-1]==0) printf("EVEN\n");
+        	}
+        	q--;
+        }
+        return 0;
+    }

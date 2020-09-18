@@ -1,0 +1,136 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+ 
+#define getchar getchar_unlocked
+int getint() {
+	int c, n;
+ 
+	while ((c = getchar()) < '-')
+		;
+	n = c - '0';
+	while ((c = getchar()) >= '0')
+		n = n * 10 + (c - '0');
+	return n;
+}
+ 
+struct T {
+	int n;
+	struct T *l, *r;
+} *empty;
+ 
+struct T *new_T(struct T *l, struct T *r) {
+	struct T *t = malloc(sizeof *t);
+ 
+	t->l = l;
+	t->r = r;
+	t->n = l->n + r->n;
+	return t;
+}
+ 
+void make_empty() {
+	int i;
+ 
+	empty = malloc(sizeof *empty);
+	empty->n = 0;
+	for (i = 0; i < 19; i++)
+		empty = new_T(empty, empty);
+}
+ 
+struct T *update1(int l, int r, int i, struct T *t) {
+	int m;
+ 
+	if (r - l == 1) {
+		t = malloc(sizeof *t);
+		t->n = 1;
+		return t;
+	}
+	m = (l + r) / 2;
+	if (i < m)
+		t = new_T(update1(l, m, i, t->l), t->r);
+	else
+		t = new_T(t->l, update1(m, r, i, t->r));
+	return t;
+}
+ 
+struct pair {
+	struct T *first, *second;
+};
+ 
+struct pair update(int l, int r, int ql, int qr, struct T *tx, struct T *ty) {
+	struct pair p, ll, rr;
+	int m;
+ 
+	if (qr <= l || r <= ql || tx->n == 0) {
+		p.first = tx;
+		p.second = ty;
+		return p;
+	}
+	if (ql <= l && r <= qr && ty->n == 0) {
+		p.first = empty;
+		p.second = tx;
+		return p;
+	}
+	m = (l + r) / 2;
+	ll = update(l, m, ql, qr, tx->l, ty->l);
+	rr = update(m, r, ql, qr, tx->r, ty->r);
+	tx = new_T(ll.first, rr.first);
+	ty = new_T(ll.second, rr.second);
+	p.first = tx;
+	p.second = ty;
+	return p;
+}
+ 
+int query(int l, int r, int ql, int qr, struct T *t) {
+	int m, q1, q2;
+ 
+	if (qr <= l || r <= ql || t->n == 0)
+		return 0;
+	if (ql <= l && r <= qr)
+		return t->n;
+	m = (l + r) / 2;
+	q1 = query(l, m, ql, qr, t->l);
+	q2 = query(m, r, ql, qr, t->r);
+	return q1 + q2;
+}
+ 
+int main() {
+	struct T **tt;
+	int n, q, i;
+ 
+	make_empty();
+	n = getint();
+	q = getint();
+	tt = malloc((n + 1) * sizeof *tt);
+	for (i = 1; i <= n; i++)
+		tt[i] = empty;
+	for (i = 0; i < n; i++) {
+		int x = getint();
+ 
+		tt[x] = update1(0, n, i, tt[x]);
+	}
+	while (q-- > 0) {
+		int t = getint();
+		int a = getint();
+		int b = getint();
+		int x = getint();
+ 
+		a--;
+		if (t == 1) {
+			int y = getint();
+ 
+			if (x != y) {
+				struct pair xy = update(0, n, a, b, tt[x], tt[y]);
+ 
+				tt[x] = xy.first;
+				tt[y] = xy.second;
+			}
+		} else {
+			int ans = query(0, n, a, b, tt[x]);
+ 
+			printf("%d\n", ans);
+		}
+	}
+	return 0;
+}
+Language: C

@@ -1,0 +1,59 @@
+#include <bits/stdc++.h>
+using namespace std;
+ 
+//  Utility method to get sum of digits of K
+long long int sumOfDigit(long long int K) 
+{
+    //  loop until K is not zero
+    long long int sod = 0;
+    while (K)
+    {
+        sod += K % 10;
+        K /= 10;
+    }
+    return sod;
+}
+ 
+// method returns count of numbers smaller than N, 
+// satisfying difference condition
+long long int totalNumbersWithSpecificDifference(long long int N, long long int diff)
+{
+    long long int low = 1, high = N;
+ 
+    //  binary search while loop    
+    while (low <= high) 
+    {
+        long long int mid = (low + high) / 2;
+ 
+        /* if difference between number and its sum 
+           of digit is smaller than given difference 
+           then  smallest number will be on left side */
+        if (mid - sumOfDigit(mid) < diff)        
+            low = mid + 1;
+         
+        /* if difference between number and its sum 
+           of digit is greater than or equal to given 
+           difference then  smallest number will be on 
+           right side */
+        else       
+            high = mid - 1;        
+    }
+ 
+    // return the difference between 'smallest number 
+    // found' and 'N' as result
+    return (N - high);
+}
+ 
+//  Driver code to test above methods
+int main()
+{
+    long long int t;
+    cin>>t;
+    while(t--)
+    {
+    long long int N,diff;
+    cin>>N>>diff;
+    cout << totalNumbersWithSpecificDifference(N, diff)<<endl;    
+    }
+    return 0; 
+}

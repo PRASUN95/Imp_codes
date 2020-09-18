@@ -1,0 +1,43 @@
+#include <bits/stdc++.h>
+ 
+using namespace std;
+ 
+int main() {
+	int n,q,q1,q2,q1i=-1,q2i=-1,cnt=INT_MAX;
+	cin>>n>>q;
+	int arr[200005];
+	for(int i=1;i<=n;i++)
+		cin>>arr[i];
+	for(int i=1+n;i<=2*n;i++)
+		arr[i]=arr[i-n];
+	
+	while(q--)
+	{
+		q1i=-1;
+		q2i=-1;
+		cnt=INT_MAX;
+		cin>>q1>>q2;
+		for(int i=1;i<=2*n;i++)	
+		{
+			if(arr[i]==q1)
+			{
+			    q1i=i;
+			    if(q2i!=-1)
+			        cnt=min(cnt,int((q1i-q2i)/2));
+			        //cout<<q1i<<" "<<q2i<<" "<<cnt<<"\n";
+			}
+			if(arr[i]==q2)
+			{
+			    q2i=i;
+			    if(q1i!=-1)
+			        cnt=min(cnt,int((q2i-q1i)/2));
+			        //cout<<q1i<<" "<<q2i<<" "<<cnt<<"\n";
+			        
+			}
+			
+		}
+		cout<<cnt<<"\n";
+	}
+	return 0;
+}
+Language: C++14

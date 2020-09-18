@@ -1,0 +1,202 @@
+#include<bits/stdc++.h>
+using namespace std;
+int arr[100005];
+int dis[3005][3005];
+int dis1[3005][3005];
+int main()
+{
+	int n,q;
+	scanf("%d %d",&n,&q);
+	int i,j;
+	for(i=0;i<n;i++)
+	scanf("%d",&arr[i]);
+	unordered_map<int,int>ma,ma1;
+	for(i=0;i<n;i++)
+	ma[arr[i]]++;
+	unordered_map<int,int>::iterator it;
+	int h=0;
+	for(it=ma.begin();it!=ma.end();it++)
+	{
+		ma1[it->first]=h++;
+	}
+	for(i=0;i<n;i++)
+	arr[i+n]=arr[i];
+	n=2*n;
+	for(i=0;i<n;i++)
+	arr[i]=ma1[arr[i]];
+	for(i=0;i<=(n/2);i++)
+	{
+		for(j=0;j<=(n/2);j++)
+		dis[i][j]=dis1[i][j]=INT_MAX;
+	}
+	for(i=0;i<n/2;i++)
+	{
+		for(j=i;j<(i+n/2);j++)
+		{
+			dis[i][arr[j]]=min(dis[i][arr[j]],j-i);
+		}
+		int dd=i+n/2;
+		for(j=dd;j>(dd-(n/2));j--)
+		{
+			dis1[i][arr[j]]=min(dis1[i][arr[j]],dd-j);
+		}
+	}
+	while(q--)
+	{
+		int x,y;
+		string s;
+		scanf("%d %d",&x,&y);
+		cin>>s;
+		if(ma1.find(y)==ma1.end())
+		{
+			printf("-1\n");
+			continue;
+		}
+		if(s[0]=='R')
+		{
+			int answ=dis[x][ma1[y]];
+			if(answ==INT_MAX)
+			cout<<"-1\n";
+			else
+			printf("%d\n",answ);
+		}
+		else
+		{
+			int answ=dis1[x][ma1[y]];
+			if(answ==INT_MAX)
+			cout<<"-1\n";
+			else
+			printf("%d\n",answ);
+		}
+	}
+}
+Language: C++
+
+
+
+
+
+
+
+
+import java.io.*;
+import java.util.*;
+import java.math.*;
+import java.util.concurrent.*;
+public final class new_sol
+{
+    static BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+	static FastScanner sc=new FastScanner(br);
+    static PrintWriter out=new PrintWriter(System.out);
+	static Random rnd=new Random();
+	static List<Integer> list=new ArrayList<>();
+	static int maxn=(int)(2e5+5);
+	
+    public static void main(String args[]) throws Exception
+    {
+		int n=sc.nextInt(),q=sc.nextInt();int[] a=new int[n];
+		
+		for(int i=0;i<n;i++)
+		{
+			a[i]=sc.nextInt();
+			
+			list.add(a[i]);
+		}
+		
+		Collections.sort(list);int[] rank=new int[maxn];
+		
+		for(int i=0;i<maxn;i++)
+		{
+			rank[i]=Collections.binarySearch(list,i);
+		}
+		
+		int[][] l_dis=new int[n+1][n+1],r_dis=new int[n+1][n+1];
+		
+		for(int i=0;i<=n;i++)
+		{
+			for(int j=0;j<=n;j++)
+			{
+				l_dis[i][j]=r_dis[i][j]=Integer.MAX_VALUE;
+			}
+		}
+		
+		for(int i=0;i<n;i++)
+		{
+			int pos=i,steps=0;
+			
+			while(steps<n)
+			{
+				int now=rank[a[pos]];
+				
+				r_dis[i][now]=Math.min(r_dis[i][now],steps);
+				
+				steps++;pos=(pos+1)%n;
+			}
+			
+			pos=i;steps=0;
+			
+			while(steps<n)
+			{
+				int now=rank[a[pos]];
+				
+				l_dis[i][now]=Math.min(l_dis[i][now],steps);
+				
+				steps++;pos=(pos-1+n)%n;
+			}
+		}
+		
+		while(q>0)
+		{
+			
+			int idx=sc.nextInt(),type=rank[sc.nextInt()];char ch=sc.next().charAt(0);
+			
+			int ans=-1;
+			
+			if(ch=='L' && type>=0)
+			{
+				ans=l_dis[idx][type];
+			}
+			
+			else if(ch=='R' && type>=0)
+			{
+				ans=r_dis[idx][type];
+			}
+			
+			out.println(ans<Integer.MAX_VALUE?ans:-1);
+			
+			q--;
+		}
+		
+		out.close();
+    }
+}
+class FastScanner
+{
+    BufferedReader in;
+    StringTokenizer st;
+    public FastScanner(BufferedReader in) {
+        this.in = in;
+    }
+	
+    public String nextToken() throws Exception {
+        while (st == null || !st.hasMoreTokens()) {
+            st = new StringTokenizer(in.readLine());
+        }
+        return st.nextToken();
+    }
+	
+	public String next() throws Exception {
+		return nextToken().toString();
+	}
+	
+    public int nextInt() throws Exception {
+        return Integer.parseInt(nextToken());
+    }
+    public long nextLong() throws Exception {
+        return Long.parseLong(nextToken());
+    }
+    public double nextDouble() throws Exception {
+        return Double.parseDouble(nextToken());
+    }
+}
+

@@ -1,0 +1,101 @@
+#include <bits/stdc++.h>
+ 
+using namespace std;
+ 
+typedef long long LL;
+ 
+const int N = 1 << 20;
+ 
+int f[N], g[N];
+ 
+int main(void) {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    for (int i = 1; i < N; ++i) f[i] = f[i / 10] + (i & 0x01 ? i % 10 : 0);
+    for (int i = 1; i < N; ++i) for (int j = i; j < N; j += i) g[j] += f[i];
+    
+    // for (int i = 1; i < 20; ++i) cout << f[i] << ' '; cout << endl;
+    // for (int i = 1; i < 20; ++i) cout << g[i] << ' '; cout << endl;
+    
+    int q;
+    cin >> q;
+    for (int n; q-- > 0 && cin >> n; ) cout << g[n] << '\n';
+    
+    return 0;
+}
+Language: C++
+
+
+
+
+
+
+
+
+
+
+
+
+//Mitesh Agrawal
+#include <bits/stdc++.h>
+using namespace std;
+#define N 1000005
+int F[N];
+int G[N];
+void build_F(){
+	for(int i = 1; i < N; i++)
+		F[i] = F[i / 10] + (i & 1) * (i % 10);
+}
+void build_G(){
+	for(int i = 1; i < N; i++)
+		for(int j = i; j < N; j += i)
+			G[j] += F[i];
+}
+int main ()
+{	
+	int q, n;
+	build_F();
+	build_G();
+	scanf("%d", &q);
+	while(q--){
+		scanf("%d", &n);
+		printf("%d\n", G[n]);
+	}
+    return 0;	
+}
+Tester Solution by Satyaki Upadhyay
+//satyaki3794
+#include <bits/stdc++.h>
+using namespace std;
+void verify(int n, int l, int r){
+    assert(n >= l && n <= r);
+}
+const int N = 1000002;
+int get_sum(int n){
+	int ans = 0;
+	while(n){
+		if((n % 10) % 2 == 1)	ans += n % 10;
+		n /= 10;
+	}
+	return ans;
+}
+int ans[N];
+ 
+int main(){
+	for(int i=1;i<N;i++){
+		int temp = get_sum(i);
+		for(int j=i;j<N;j+=i)
+			ans[j] += temp;
+	}
+	int q;
+	scanf("%d", &q);
+	verify(q, 1, 1000*1000);
+	while(q--){
+		int n;
+		scanf("%d", &n);
+		verify(n, 1, 1000*1000);
+		printf("%d\n", ans[n]);
+	}
+    return 0;
+}

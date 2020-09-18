@@ -1,0 +1,47 @@
+https://www.hackerearth.com/practice/data-structures/hash-tables/basics-of-hash-tables/practice-problems/algorithm/maximum-occurrence-9/description/
+
+#include <bits/stdc++.h>
+using namespace std;
+int main()
+{
+    map<char,int>mp;
+    map<char,int>::iterator it;
+    char str[100];
+    cin.getline(str,100);
+    int count=1;
+    for(int i=0;i<strlen(str);i++)
+    {
+        it=mp.find(str[i]);
+        if(it!=mp.end())
+        {
+            (mp.find(str[i])->second)++;
+        }
+        else mp.insert(pair<char,int>(str[i],count));
+    }
+    int k;
+    char c1;
+    int max=it->second;
+    c1=it->first;
+ 
+    for(it=mp.begin();it!=mp.end();it++)
+    {
+        k=it->second;
+        if(k>max)
+        {
+            max=it->second;
+            c1=it->first;
+ 
+ 
+        }
+    }
+    
+ 
+    cout<<c1<<" "<<max;
+ 
+ 
+ 
+ 
+ 
+    return 0;
+}
+Language: C++

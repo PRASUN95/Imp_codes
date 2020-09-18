@@ -1,0 +1,132 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Collections;
+ 
+ 
+class Dicto
+{
+    public static void main(String args[] ) throws Exception 
+    {
+    	int c=0,c1=0;
+    	ArrayList<String> li=new ArrayList<String>();
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int line=Integer.parseInt(br.readLine());
+        for(int i=0;i<line;i++)
+        {
+        	String inp=br.readLine();
+        	li.add(inp);
+        }
+        for(int j=0;j<li.size();j++)
+        {
+        	String name=li.get(j);
+        	for(int k=0;k<li.size();k++)
+        	{
+        		if(li.get(k).equals(name))
+        		{
+        			c++;
+        		}
+        				
+        	}
+        	if(c1<line-1)
+        	{
+        	System.out.println(name+" "+c);
+        	c=0;
+        	c1++;
+        	}
+        }
+        }
+}
+Language: Java
+
+
+#include <bits/stdc++.h>
+using namespace std;
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    int n;
+    cin>>n;
+    string a[n];
+    for(int i=0;i<n;i++)
+    {
+        cin>>a[i];
+    }
+    sort(a,a+n);
+    int i = 1 ; 
+    int count = 1 ;
+    
+    
+   while(i<n){
+   	if(a[i]==a[i-1]){
+   		count++ ;
+   	}
+   	else{
+   		cout<<a[i-1]<<" "<<count<<endl;
+   		count =1 ;
+   	}
+   	i++ ;
+   }
+   cout<<a[i-1]<<" "<<count<<endl;
+}
+
+
+
+
+#include<stdio.h>
+#include<string.h>
+struct node{
+        int count;
+        char s[70];
+};
+struct node arr[2100];
+int main()
+{
+        int n,arrcount=0,i,j;
+        scanf("%d",&n);
+        for(i=0;i<n;i++)
+        {
+                char temp[100];
+                scanf("%s",temp);
+                int flag=0;
+                for(j=0;j<i;j++)
+                {
+                        if(strcmp(arr[j].s,temp)==0)
+                        {
+                                arr[j].count++;
+                                flag=99;
+                                break;
+                        }
+ 
+                }
+                if(flag!=99)
+                {
+                        strcpy(arr[arrcount].s,temp);
+                        arr[arrcount].count=1;
+                        arrcount++;
+ 
+                }
+        }
+        for(i=1;i<arrcount;i++)
+        {
+                j=i;
+                while(j>0 && strcmp(arr[j].s,arr[j-1].s)<0)
+                {
+                        arr[2089]=arr[j];
+                        arr[j]=arr[j-1];
+                        arr[j-1]=arr[2089];
+                        j--;
+ 
+                }
+        }
+        for(i=0;i<arrcount;i++)
+                printf("%s %d\n",arr[i].s,arr[i].count);
+        return 0;
+ 
+}
+
+
+
+
+
